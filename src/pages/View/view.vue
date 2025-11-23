@@ -354,7 +354,7 @@ onMounted(async () => {
   }
 });
 
-const verify = () => { 
+const verify = () => {
   // 前端可选校验已在其他处保证，这里直接请求
   useRequest(() => verifyAPI(verifyData.value), {
     onBefore() {
@@ -430,7 +430,6 @@ const getQuestionnaireView = async () => {
           answer: ""
         }));
 
-        
         if (showData.value.surveyType === QuesType.VOTE) {
           try {
             const statRes = await getStatistic({ id: Number(decryptedId.value) });
