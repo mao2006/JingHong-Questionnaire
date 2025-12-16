@@ -112,7 +112,7 @@ function useQuestionListReducer(questionDataList: Ref<Question[]>) {
 
     return {
       ...commonSettings,
-      quesSetting: cloneDeep(quesSettingMap)[type],
+      quesSetting: cloneDeep(quesSettingMap[type]),
       ...(type === QuesItemType.RADIO || type === QuesItemType.CHECKBOX ? { options: [...defaultOptions] } : {})
     } as Question;
   }
