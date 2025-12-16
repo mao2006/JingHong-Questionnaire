@@ -9,6 +9,7 @@ import { Question, Option } from "@/utilities/type.ts";
 import { quesSettingMap } from "@/utilities/quesSettingMap.ts";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { dayjs } from "element-plus";
+import { cloneDeep } from "lodash-es";
 
 /**
  * 返回默认的问卷 schema
@@ -111,7 +112,7 @@ function useQuestionListReducer(questionDataList: Ref<Question[]>) {
 
     return {
       ...commonSettings,
-      quesSetting: quesSettingMap[type],
+      quesSetting: cloneDeep(quesSettingMap)[type],
       ...(type === QuesItemType.RADIO || type === QuesItemType.CHECKBOX ? { options: [...defaultOptions] } : {})
     } as Question;
   }
