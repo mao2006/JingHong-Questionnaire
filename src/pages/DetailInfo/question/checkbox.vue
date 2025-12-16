@@ -93,20 +93,40 @@ const localOptions = ref(props.options);
 const localMax = ref(props.maximum_option);
 const localMin = ref(props.minimum_option);
 
-const handleFileChange = async (event, serialNum: number) => {
-  const file = event.target.files[0];
+const handleFileChange = async (event: Event, serialNum: number) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
   if (!file) return;
+  
   const formData = new FormData();
   formData.append("img", file);
+  
+
+  const currentOption = localOptions.value.find(item => item.serialNum === serialNum);
+  if (!currentOption) return;
+  
+
+  const originalImg = currentOption.img || '';
+  
   useRequest(() => saveImgAPI(formData), {
-    onSuccess(res) {
-      const option = localOptions.value.find(item => item.serialNum === serialNum);
-      if (option) {
-        option.img = res.data;
+    onSuccess(res: any) {
+      if (res.code === 200) {
+       
+        currentOption.img = res.data;
+        ElNotification.success("上传图片成功");
+      } else {
+       
+        currentOption.img = originalImg;
+     
+        input.value = '';
+        ElNotification.error(res.msg || "上传失败");
       }
-      ElNotification.success("上传图片成功");
     },
-    onError(error) {
+    onError(error: any) {
+      
+      currentOption.img = originalImg;
+      
+      input.value = '';
       ElNotification.error("上传图片失败" + error);
     }
   });
