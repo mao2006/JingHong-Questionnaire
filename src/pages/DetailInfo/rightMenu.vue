@@ -17,22 +17,22 @@
       </div>
       <div class="pt-8">
         <el-checkbox
-          v-if="questionList[activeSerial-1]?.quesSetting?.required"
-          v-model="questionList[activeSerial-1].quesSetting.required"
+          v-if="questionList[activeSerial - 1]?.quesSetting?.required"
+          v-model="questionList[activeSerial - 1].quesSetting.required"
           label="必选"
           size="large"
         />
         <el-checkbox
-          v-if="questionList[activeSerial-1]?.quesSetting?.unique"
-          v-model="questionList[activeSerial-1].quesSetting.unique"
+          v-if="questionList[activeSerial - 1]?.quesSetting?.unique"
+          v-model="questionList[activeSerial - 1].quesSetting.unique"
           label="唯一"
           size="large"
         />
       </div>
 
       <!-- 有其他选项 -->
-      <div v-if="currentType===QuesItemType.CHECKBOX||currentType===QuesItemType.RADIO" class="pt-2">
-        <el-checkbox v-model="questionList[activeSerial-1].quesSetting.otherOption" label="有其他选项" size="large" />
+      <div v-if="currentType === QuesItemType.CHECKBOX || currentType === QuesItemType.RADIO" class="pt-2">
+        <el-checkbox v-model="questionList[activeSerial - 1].quesSetting.otherOption" label="有其他选项" size="large" />
       </div>
 
       <div class="pt-16 text-sm font-medium">
@@ -41,7 +41,7 @@
 
       <div class="pt-16">
         <el-input
-          v-model="questionList[activeSerial-1].description"
+          v-model="questionList[activeSerial - 1].description"
           type="textarea"
           style="width: 240px"
           placeholder="Please input"
@@ -49,12 +49,12 @@
       </div>
 
       <!-- 填空特殊逻辑 -->
-      <div v-if="currentType===QuesItemType.INPUT||currentType===QuesItemType.TEXTAREA" class="pt-24">
+      <div v-if="currentType === QuesItemType.INPUT || currentType === QuesItemType.TEXTAREA" class="pt-24">
         <div class="text-sm font-medium">
           内容格式限制
         </div>
         <div class="pt-16">
-          <el-select v-model="questionList[activeSerial-1].quesSetting.reg" style="width: 240px">
+          <el-select v-model="questionList[activeSerial - 1].quesSetting.reg" style="width: 240px">
             <el-option
               v-for="item in basicReg"
               :key="item.value"
@@ -66,24 +66,31 @@
       </div>
 
       <!-- 多选特殊逻辑 -->
-      <div v-if="currentType===QuesItemType.CHECKBOX" class="pt-24">
+      <div v-if="currentType === QuesItemType.CHECKBOX" class="pt-24">
         <div class="text-sm font-medium">
           选项配置
         </div>
         <div class="pt-16">
           <div>
             <span class="text-sm font-medium pr-8">最少选择数</span>
-            <el-input-number v-model="questionList[activeSerial-1].quesSetting.minimumOption" min="0" :max="questionList[activeSerial-1].quesSetting.maximumOption" />
+            <el-input-number
+              v-model="questionList[activeSerial - 1].quesSetting.minimumOption"
+              min="0"
+              :max="questionList[activeSerial - 1].quesSetting.maximumOption"
+            />
           </div>
           <div class="pt-10">
             <span class="text-sm font-medium pr-8">最多选择数</span>
-            <el-input-number v-model="questionList[activeSerial-1].quesSetting.maximumOption" :min="questionList[activeSerial-1].quesSetting.minimumOption" />
+            <el-input-number
+              v-model="questionList[activeSerial - 1].quesSetting.maximumOption"
+              :min="questionList[activeSerial - 1].quesSetting.minimumOption"
+            />
           </div>
         </div>
       </div>
 
       <!-- 选择操作 -->
-      <div v-if="currentType===QuesItemType.RADIO||currentType===QuesItemType.CHECKBOX" class="pt-24">
+      <div v-if="currentType === QuesItemType.RADIO || currentType === QuesItemType.CHECKBOX" class="pt-24">
         <el-button @click="addOption(activeSerial)">
           增加选项
         </el-button>
@@ -112,8 +119,6 @@ const typeChinese = {
 const { activeSerial } = storeToRefs(useActiveStore());
 
 const editStore = storeToRefs(useEditStore());
-
-console.log(editStore.schema.value);
 
 const questionList = computed({
   get: () => editStore.schema.value?.quesConfig?.questionList || [],
@@ -153,6 +158,4 @@ const addOption = (serialNum: number) => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
