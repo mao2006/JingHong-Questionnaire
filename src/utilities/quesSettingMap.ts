@@ -37,9 +37,6 @@ const quesSettingMap = {
     ...defaultSetting,
     maximumOption: 0,
     minimumOption: 0
-  },
-  [QuesItemType.UNDEFINED]: {
-    questionType: QuesItemType.UNDEFINED
   }
 };
 

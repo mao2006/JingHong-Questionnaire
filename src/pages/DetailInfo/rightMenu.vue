@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-base-100 flex-1">
+  <div v-if="currentType !== undefined" class="bg-base-100 flex-1">
     <!-- 题型显示 -->
     <div class="flex bg-base-200 w-full opacity-0.6 items-center" style="height: 4vh;">
-      <div v-if="activeSerial!==-1" class="text-red-400 pl-16 text-sm">
+      <div class="text-red-400 pl-16 text-sm">
         {{ typeChinese[currentType] }}
       </div>
     </div>
@@ -10,7 +10,7 @@
     <!-- 垂直间距 -->
     <div class="w-full" style="height: 2vh;" />
 
-    <div v-if="activeSerial!==-1" class="pl-16">
+    <div class="pl-16">
       <!-- 所有题型通用 -->
       <div class="text-sm font-medium">
         基础配置
@@ -101,14 +101,13 @@ import { basicReg } from "@/utilities/regs";
 import { storeToRefs } from "pinia";
 
 const typeChinese = {
-  0: "",
   1: "单项选择题",
   2: "多项选择题",
   3: "单行输入框",
   4: "多行输入框",
   5: "图片",
   6: "投票"
-} as const;
+} as const satisfies Record<QuesItemType, string>;
 
 const { activeSerial } = storeToRefs(useActiveStore());
 
@@ -125,9 +124,9 @@ const questionList = computed({
   }
 });
 
-const currentType = computed<QuesItemType>(() => {
+const currentType = computed<QuesItemType | undefined>(() => {
   if (activeSerial.value === -1) {
-    return 0;
+    return undefined;
   } else {
     return (questionList.value[activeSerial.value - 1]?.quesSetting.questionType);
   }

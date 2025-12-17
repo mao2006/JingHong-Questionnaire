@@ -94,6 +94,10 @@ function useInitializeSchema(surveyId: Ref<number>) {
 
 function useQuestionListReducer(questionDataList: Ref<Question[]>) {
   function createQuestion(type: QuesItemType, serialNum: number): Question {
+    if (!(type in quesSettingMap)) {
+      throw new Error("未知的题目类型");
+    }
+
     const commonSettings = {
       serialNum,
       subject: "新问题",
@@ -105,10 +109,6 @@ function useQuestionListReducer(questionDataList: Ref<Question[]>) {
       { serialNum: 1, content: "选项1", img: "", description: "" },
       { serialNum: 2, content: "选项2", img: "", description: "" }
     ];
-
-    if (!(type in quesSettingMap)) {
-      throw new Error("未知的题目类型");
-    }
 
     return {
       ...commonSettings,
