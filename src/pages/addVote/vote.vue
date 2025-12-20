@@ -3,7 +3,7 @@
     <div class="grid grid-cols-2 gap-80 my-60">
       <div
         v-for="(item, index) in currentSchema.quesConfig.questionList[0].options"
-        :key="item.id"
+        :key="`${item.img} ${item.content} ${index}`"
         class="flex flex-col gap-12"
       >
         <el-upload
@@ -14,8 +14,8 @@
           :auto-upload="false"
         >
         </el-upload>
-        
-        <div 
+
+        <div
           class="avatar-uploader"
           @click="openFileDialog(item.serialNum)"
         >
@@ -24,7 +24,7 @@
             <Plus />
           </el-icon>
         </div>
-        
+
         <div v-if="item.uploadStatus === 'uploading' || item.uploadStatus === 'error'" class="text-xs">
           <span v-if="item.uploadStatus === 'uploading'" class="text-blue-500">
             正在上传: {{ item.uploadingFileName }}
@@ -33,11 +33,11 @@
             上传失败
           </span>
         </div>
-        
+
         <div class="text-sm text-gray-600">
           文件: {{ item.displayFileName || '未选择文件' }}
         </div>
-        
+
         <el-input v-model="item.content" />
         <el-button
           v-if="currentSchema.quesConfig.questionList[0].options.length > 1"
@@ -48,7 +48,7 @@
           删除
         </el-button>
       </div>
-      
+
       <div class="flex justify-center items-center h-332 border border-gray-300 cursor-pointer" @click="addOption">
         <el-icon size="30">
           <Plus />
@@ -66,14 +66,13 @@ import { useEditVoteStore } from "@/stores/voteEdit.ts";
 import { ref } from 'vue';
 
 interface QuestionOption {
-  id?: number;                   
   serialNum: number;
   content: string;
   img: string;
   description: string;
-  uploadStatus?: string;         
-  uploadingFileName?: string;     
-  displayFileName?: string;       
+  uploadStatus?: string;
+  uploadingFileName?: string;
+  displayFileName?: string;
 }
 
 const { schema } = useEditVoteStore();
@@ -106,38 +105,38 @@ const openFileDialog = (serialNum: number) => {
 
 const handleFileChange = (file: any, serialNum: number) => {
   if (!file) return;
-  
+
   const currentOption = currentSchema.quesConfig.questionList[0].options.find(
     (item) => item.serialNum === serialNum
-  ) as QuestionOption;  
-  
+  ) as QuestionOption;
+
   if (!currentOption) return;
-  
+
   const originalImg = currentOption.img || '';
   const originalFileName = currentOption.displayFileName || '未选择文件';
-  
+
   currentOption.displayFileName = file.name;
   currentOption.uploadStatus = 'uploading';
   currentOption.uploadingFileName = file.name;
-  
+
   const formData = new FormData();
   formData.append("img", file.raw);
-  
+
   useRequest(() => saveImgAPI(formData), {
     onSuccess(res: any) {
       if (res.code === 200) {
-       
+
         currentOption.img = res.data;
         currentOption.uploadStatus = 'success';
         currentOption.displayFileName = file.name;
         ElNotification.success("上传图片成功");
       } else {
-        
+
         throw new Error(res.msg || "上传失败");
       }
     },
     onError(error: any) {
-      
+
       currentOption.img = originalImg;
       currentOption.uploadStatus = 'error';
       currentOption.displayFileName = originalFileName;
@@ -148,7 +147,6 @@ const handleFileChange = (file: any, serialNum: number) => {
 
 const addOption = () => {
   currentSchema.quesConfig.questionList[0].options.push({
-    id: Date.now(),  
     description: "",
     serialNum: currentSchema.quesConfig.questionList[0].options.length + 1,
     img: "",
