@@ -18,9 +18,9 @@
       </div>
     </div>
     <div class="divider" />
-    <div ref="scrollContainer" class="flex-col p-5 overflow-y-auto h-180 mt-10" style="scroll-behavior: smooth;">
+    <div class="flex-col p-5 overflow-y-auto h-180 mt-10" style="scroll-behavior: smooth;">
       <div v-for="item in localOptions" :key="item.serialNum" class="flex items-center gap-10 my-5">
-        <input type="radio" :name="props.serialNum" class="radio-sm my-5">
+        <input type="radio" :name="`${props.serialNum}`" class="radio-sm my-5">
         <input
           v-model="item.content"
           type="text"
@@ -29,7 +29,12 @@
         >
         <div class="ml-10 flex items-center gap-20">
           <div v-if="item.img" class="mt-4">
-            <img :src="item.img" :key="item.img" alt="Preview" style="max-width: 50px; max-height: 50px;">
+            <img
+              :key="item.img"
+              :src="item.img"
+              alt="Preview"
+              style="max-width: 50px; max-height: 50px;"
+            >
           </div>
           <input
             v-if="isActive"
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import { useRequest } from "vue-hooks-plus";
 import { saveImgAPI } from "@/apis";
 import { ElNotification } from "element-plus";
@@ -78,7 +83,6 @@ const props = defineProps<{
 
 const emits = defineEmits(["update:unique", "on-click", "update:otherOption", "update:optionChoose", "update:title", "update:options", "update:describe"]);
 
-const scrollContainer = ref<HTMLDivElement>();
 const localTitle = ref<string>(props.title || "");
 const localDescribe = ref<string>(props.describe || "");
 const localOptionChoose = ref<boolean>(props.optionChoose);
@@ -90,30 +94,30 @@ const handleFileChange = async (event: Event, serialNum: number) => {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   if (!file) return;
-  
+
   const formData = new FormData();
   formData.append("img", file);
 
   const currentOption = localOptions.value.find(item => item.serialNum === serialNum);
   if (!currentOption) return;
 
-  const originalImg = currentOption.img || '';
-  
+  const originalImg = currentOption.img || "";
+
   useRequest(() => saveImgAPI(formData), {
     onSuccess(res: any) {
       if (res.code === 200) {
- 
+
         currentOption.img = res.data;
         ElNotification.success("上传图片成功");
       } else {
-      
+
         throw new Error(res.msg || "上传失败");
       }
     },
     onError(error: any) {
-    
+
       currentOption.img = originalImg;
-      input.value = '';
+      input.value = "";
       ElNotification.error("上传图片失败：" + (error.message || error));
     }
   });
