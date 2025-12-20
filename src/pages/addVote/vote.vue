@@ -25,7 +25,7 @@
           </el-icon>
         </div>
         
-        <div v-if="item.uploadStatus" class="text-xs">
+        <div v-if="item.uploadStatus === 'uploading' || item.uploadStatus === 'error'" class="text-xs">
           <span v-if="item.uploadStatus === 'uploading'" class="text-blue-500">
             正在上传: {{ item.uploadingFileName }}
           </span>
@@ -126,22 +126,22 @@ const handleFileChange = (file: any, serialNum: number) => {
   useRequest(() => saveImgAPI(formData), {
     onSuccess(res: any) {
       if (res.code === 200) {
+       
         currentOption.img = res.data;
         currentOption.uploadStatus = 'success';
         currentOption.displayFileName = file.name;
         ElNotification.success("上传图片成功");
       } else {
-        currentOption.img = originalImg;
-        currentOption.uploadStatus = 'error';
-        currentOption.displayFileName = originalFileName;
-        ElNotification.error(res.msg || "上传失败");
+        
+        throw new Error(res.msg || "上传失败");
       }
     },
     onError(error: any) {
+      
       currentOption.img = originalImg;
       currentOption.uploadStatus = 'error';
       currentOption.displayFileName = originalFileName;
-      ElNotification.error("上传图片失败：" + error);
+      ElNotification.error("上传图片失败：" + (error.message || error));
     }
   });
 };
@@ -183,11 +183,6 @@ const removeOption = (index: number) => {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  width: 250px;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: var(--el-transition-duration-fast);
 }
 

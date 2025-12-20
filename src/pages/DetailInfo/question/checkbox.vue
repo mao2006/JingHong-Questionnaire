@@ -30,7 +30,7 @@
           >
           <div class="ml-10 flex items-center gap-20">
             <div v-if="item.img" class="mt-4">
-              <img :src="item.img" alt="Preview" style="max-width: 50px; max-height: 50px;">
+               <img :src="item.img" :key="item.img" alt="Preview" style="max-width: 50px; max-height: 50px;">
             </div>
             <input
               v-if="isActive"
@@ -101,33 +101,26 @@ const handleFileChange = async (event: Event, serialNum: number) => {
   const formData = new FormData();
   formData.append("img", file);
   
-
   const currentOption = localOptions.value.find(item => item.serialNum === serialNum);
   if (!currentOption) return;
   
-
   const originalImg = currentOption.img || '';
   
   useRequest(() => saveImgAPI(formData), {
     onSuccess(res: any) {
       if (res.code === 200) {
-       
+     
         currentOption.img = res.data;
         ElNotification.success("上传图片成功");
       } else {
-       
-        currentOption.img = originalImg;
-     
-        input.value = '';
-        ElNotification.error(res.msg || "上传失败");
+        throw new Error(res.msg || "上传失败");
       }
     },
     onError(error: any) {
       
       currentOption.img = originalImg;
-      
       input.value = '';
-      ElNotification.error("上传图片失败" + error);
+      ElNotification.error("上传图片失败：" + (error.message || error));
     }
   });
 };
