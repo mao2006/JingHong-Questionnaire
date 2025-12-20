@@ -12,14 +12,18 @@
           :show-file-list="false"
           :on-change="(file: any) => handleFileChange(file, item.serialNum)"
           :auto-upload="false"
-        >
-        </el-upload>
+        />
 
         <div
           class="avatar-uploader"
           @click="openFileDialog(item.serialNum)"
         >
-          <img v-if="item.img" :src="item.img" :key="item.img" class="avatar">
+          <img
+            v-if="item.img"
+            :key="item.img"
+            :src="item.img"
+            class="avatar"
+          >
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
@@ -63,7 +67,7 @@ import { useRequest } from "vue-hooks-plus";
 import { saveImgAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { useEditVoteStore } from "@/stores/voteEdit.ts";
-import { ref } from 'vue';
+import { ref } from "vue";
 
 interface QuestionOption {
   serialNum: number;
@@ -98,7 +102,7 @@ const setUploadRef = (el: any, serialNum: number) => {
 const openFileDialog = (serialNum: number) => {
   const uploadInstance = uploadRefs.value[serialNum];
   if (uploadInstance?.$el) {
-    const fileInput = uploadInstance.$el.querySelector('input[type="file"]');
+    const fileInput = uploadInstance.$el.querySelector("input[type=\"file\"]");
     fileInput?.click();
   }
 };
@@ -112,11 +116,11 @@ const handleFileChange = (file: any, serialNum: number) => {
 
   if (!currentOption) return;
 
-  const originalImg = currentOption.img || '';
-  const originalFileName = currentOption.displayFileName || '未选择文件';
+  const originalImg = currentOption.img || "";
+  const originalFileName = currentOption.displayFileName || "未选择文件";
 
   currentOption.displayFileName = file.name;
-  currentOption.uploadStatus = 'uploading';
+  currentOption.uploadStatus = "uploading";
   currentOption.uploadingFileName = file.name;
 
   const formData = new FormData();
@@ -127,7 +131,7 @@ const handleFileChange = (file: any, serialNum: number) => {
       if (res.code === 200) {
 
         currentOption.img = res.data;
-        currentOption.uploadStatus = 'success';
+        currentOption.uploadStatus = "success";
         currentOption.displayFileName = file.name;
         ElNotification.success("上传图片成功");
       } else {
@@ -138,7 +142,7 @@ const handleFileChange = (file: any, serialNum: number) => {
     onError(error: any) {
 
       currentOption.img = originalImg;
-      currentOption.uploadStatus = 'error';
+      currentOption.uploadStatus = "error";
       currentOption.displayFileName = originalFileName;
       ElNotification.error("上传图片失败：" + (error.message || error));
     }
