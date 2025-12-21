@@ -16,16 +16,14 @@
         基础配置
       </div>
       <div class="pt-8">
-        <!-- 修改这里：移除对 required 值的判断 -->
         <el-checkbox
-          v-if="questionList[activeSerial-1]?.quesSetting"
+          v-if="questionList[activeSerial-1]?.quesSetting?.required !== undefined"
           v-model="questionList[activeSerial-1].quesSetting.required"
           label="必选"
           size="large"
         />
-        <!-- 修改这里：移除对 unique 值的判断 -->
         <el-checkbox
-          v-if="questionList[activeSerial-1]?.quesSetting"
+          v-if="questionList[activeSerial-1]?.quesSetting?.unique !== undefined"
           v-model="questionList[activeSerial-1].quesSetting.unique"
           label="唯一"
           size="large"
@@ -34,7 +32,12 @@
 
       <!-- 有其他选项 -->
       <div v-if="currentType===QuesItemType.CHECKBOX||currentType===QuesItemType.RADIO" class="pt-2">
-        <el-checkbox v-model="questionList[activeSerial-1].quesSetting.otherOption" label="有其他选项" size="large" />
+        <el-checkbox
+          v-if="questionList[activeSerial-1]?.quesSetting?.otherOption !== undefined"
+          v-model="questionList[activeSerial-1].quesSetting.otherOption"
+          label="有其他选项"
+          size="large"
+        />
       </div>
 
       <div class="pt-16 text-sm font-medium">

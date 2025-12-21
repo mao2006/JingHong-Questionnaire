@@ -119,7 +119,7 @@ const showQRcodeModal = (qrCodeURL: Ref<string, string>, copyQrCode: () => Promi
 let modalCopyCodeURL: () => void;
 
 watch(surveyType, () => {
-  tempStore.surveyType = surveyType;
+  tempStore.surveyType = surveyType.value;
 });
 onMounted(() => {
   loginStore.setShowHeader(true);
@@ -134,25 +134,14 @@ const getQuestionnaireList = (title?: string) => {
     onBefore: () => startLoading(),
     onSuccess(res: any) {
       if (res.code === 200) {
-        // 添加去重逻辑 - 基于问卷ID去重
-        const uniqueList = res.data.survey_list.filter((item: any, index: number, self: any[]) =>
-          index === self.findIndex((t: any) => t.id === item.id)
-        );
-
-        questionnaireList.value = uniqueList;
+        questionnaireList.value = res.data.survey_list;
         totalPageNum.value = res.data.total_page_num;
         loading.value = false;
-
-        // 调试信息（可选）
-        if (uniqueList.length !== res.data.survey_list.length) {
-          console.warn(`去重前: ${res.data.survey_list.length} 条, 去重后: ${uniqueList.length} 条`);
-        }
       }
     },
     onFinally: () => closeLoading()
   });
 };
-
 getQuestionnaireList();
 
 const handleCurrentChange = (val: number) => {
