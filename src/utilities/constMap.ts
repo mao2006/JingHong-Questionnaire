@@ -10,7 +10,6 @@ enum QuesType {
 }
 
 enum QuesItemType {
-  UNDEFINED = 0,
   RADIO = 1,
   CHECKBOX = 2,
   INPUT = 3,
