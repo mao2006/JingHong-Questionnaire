@@ -2,7 +2,7 @@ import { request } from "@/apis/axios";
 import { saveImgResponse } from "../types/saveImgTypes";
 
 const saveImgAPI = (data: FormData | null):
-  Promise<saveImgResponse> => {
+Promise<saveImgResponse> => {
   return request("/api/user/upload/img", {
     data: data,
     method: "POST",

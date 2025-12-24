@@ -1,10 +1,10 @@
 export interface saveImgResponse {
-    code: number;
-    /**
+  code: number;
+  /**
      * 图片url
      */
-    data: string | null;
-    msg: string;
-    [property: string]: any;
+  data: string | null;
+  msg: string;
+  [property: string]: any;
 }
-/*apifox中第一个成功示例的data为null，*/
+/* apifox中第一个成功示例的data为null，*/

@@ -9,7 +9,7 @@ const urlde =
 */
 // 定义参数的类型
 const getUserAPI = (params: GetUserRequest):
-  Promise<GetUserResponse> => {
+Promise<GetUserResponse> => {
   return request("/api/user/get", {
     method: "GET",
     params: params

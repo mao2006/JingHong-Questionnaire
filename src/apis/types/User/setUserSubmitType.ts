@@ -1,48 +1,47 @@
 export interface SetUserSubmitRequest {
-    /**
+  /**
      * 问卷编号
      */
-    id: number;
-    /**
+  id: number;
+  /**
      * 答卷列表
      */
-    questions_list: QuestionsList[];
-    /**
+  questions_list: QuestionsList[];
+  /**
      * 包含学号信息的token
      */
-    token: string;
-    [property: string]: any;
+  token: string;
+  [property: string]: any;
 }
 
 export interface QuestionsList {
-    /**
+  /**
      * 答卷
      */
-    answer: string;
-    /**
+  answer: string;
+  /**
      * 问题编号
      */
-    question_id: number;
-    [property: string]: any;
+  question_id: number;
+  [property: string]: any;
 }
 
-
 export interface SetUserSubmitResponse {
-    code: number;
-    data: Data | null;
-    msg: string;
-    [property: string]: any;
+  code: number;
+  data: Data | null;
+  msg: string;
+  [property: string]: any;
 }
 
 export interface Data {
-    /**
+  /**
      * 提交时间
      */
-    time: string;
-    [property: string]: any;
+  time: string;
+  [property: string]: any;
 }
 
-/*import { request } from "@/apis/axios";
+/* import { request } from "@/apis/axios";
 import { UnwrapRef } from "vue";
 
 // 定义请求数据的接口
