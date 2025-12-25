@@ -6,12 +6,12 @@ import delQuestionnaireAPI from "./service/Home/delQuestionnaireAPI";
 import setQuestionnaireDetailAPI from "@/apis/service/DetailInfo/setQuestionnaireDetailAPI.ts";
 import getAnswersAPI from "./service/DataDisplay/getAnswersAPI";
 import delAnswerAPI from "./service/DataDisplay/delAnswerAPI";
-import saveImgAPI from "@/apis/service/saveImg.ts";
+import saveImgAPI from "@/apis/service/saveImgAPI";
 import createQuestionnaireDetailAPI from "@/apis/service/DetailInfo/createQuestionnaireDetailAPI.ts";
 import getDatatableAPI from "./service/DataDisplay/getDatatableAPI";
 import getStaticsDataAPI from "./service/DataDisplay/getStaticsDataAPI";
 import getQuestionnaireAPI from "./service/User/getQuestionnaireAPI";
-import setUserSubmitAPI from "./service/User/setUserSubmit";
+import setUserSubmitAPI from "./service/User/setUserSubmitAPI";
 export {
   loginAPI,
   getQuestionnaireListAPI,

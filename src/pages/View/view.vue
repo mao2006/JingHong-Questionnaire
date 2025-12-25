@@ -281,9 +281,9 @@ import CryptoJS from "crypto-js";
 import { useMainStore } from "@/stores";
 // 暗黑模式hook
 import { useDarkModeSwitch } from "@/utilities/darkModeSwitch";
-import verifyAPI from "@/apis/service/User/verifyApi.ts";
+import verifyAPI from "@/apis/service/User/verifyAPI";
 import Vote from "@/pages/View/vote.vue";
-import { getStatisticAPI } from "@/apis/service/User/getStatistic.ts";
+import { getStatisticAPI } from "@/apis/service/User/getStatisticAPI";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
