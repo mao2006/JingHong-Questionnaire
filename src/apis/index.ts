@@ -7,7 +7,7 @@ import setQuestionnaireDetailAPI from "@/apis/service/DetailInfo/setQuestionnair
 import getAnswersAPI from "./service/DataDisplay/getAnswersAPI";
 import delAnswerAPI from "./service/DataDisplay/delAnswerAPI";
 import saveImgAPI from "@/apis/service/saveImg.ts";
-import setNewQuestionnaireDetailAPI from "@/apis/service/DetailInfo/setNewQuestionnaireDetailAPI.ts";
+import createQuestionnaireDetailAPI from "@/apis/service/DetailInfo/createQuestionnaireDetailAPI.ts";
 import getDatatableAPI from "./service/DataDisplay/getDatatableAPI";
 import getStaticsDataAPI from "./service/DataDisplay/getStaticsDataAPI";
 import getUserAPI from "./service/User/getUserApi";
@@ -22,7 +22,7 @@ export {
   getAnswersAPI,
   delAnswerAPI,
   saveImgAPI,
-  setNewQuestionnaireDetailAPI,
+  createQuestionnaireDetailAPI,
   getDatatableAPI,
   getStaticsDataAPI,
   getUserAPI,

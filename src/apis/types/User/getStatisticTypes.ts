@@ -1,4 +1,4 @@
-export interface SetStatisticRequest {
+export interface GetStatisticRequest {
   /**
      * 问卷编号
      */
@@ -6,7 +6,7 @@ export interface SetStatisticRequest {
   [property: string]: any;
 }
 
-export interface SetStatisticResponse {
+export interface GetStatisticResponse {
   code: number;
   data: Data | null;
   msg: string;

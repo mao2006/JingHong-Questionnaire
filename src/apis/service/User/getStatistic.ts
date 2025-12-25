@@ -1,14 +1,13 @@
 import { request } from "@/apis/axios";
-import { SetStatisticRequest, SetStatisticResponse } from "@/apis/types/User/getStatisticTypes";
+import { GetStatisticRequest, GetStatisticResponse } from "@/apis/types/User/getStatisticTypes";
 
-// 定义请求数据的接口
-// API名字与文件名不一致
+// 获取投票选项数据的接口
 
-const setStatisticAPI = (params: SetStatisticRequest): Promise<SetStatisticResponse> => {
+const getStatisticAPI = (params: GetStatisticRequest): Promise<GetStatisticResponse> => {
   return request("/api/user/statistic", {
     method: "GET",
     params: params
   });
 };
 
-export default setStatisticAPI;
+export { getStatisticAPI };

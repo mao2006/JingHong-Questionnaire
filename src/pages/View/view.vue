@@ -283,7 +283,7 @@ import { useMainStore } from "@/stores";
 import { useDarkModeSwitch } from "@/utilities/darkModeSwitch";
 import verifyAPI from "@/apis/service/User/verifyApi.ts";
 import Vote from "@/pages/View/vote.vue";
-import getStatistic from "@/apis/service/User/getStatistic.ts";
+import { getStatisticAPI } from "@/apis/service/User/getStatistic.ts";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
@@ -419,7 +419,7 @@ const getQuestionnaireView = async () => {
 
         if (showData.value.surveyType === QuesType.VOTE) {
           try {
-            const statRes = await getStatistic({ id: Number(decryptedId.value) });
+            const statRes = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = statRes.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e);
@@ -506,7 +506,7 @@ const submit = () => {
           await router.push("/Thank");
         } else {
           try {
-            const res = await getStatistic({ id: Number(decryptedId.value) });
+            const res = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = res.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e);

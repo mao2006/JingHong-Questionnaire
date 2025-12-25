@@ -1,4 +1,4 @@
-export interface setNewQuestionnaireDetailRequest {
+export interface createQuestionnaireDetailRequest {
   base_config: BaseConfig;
   ques_config: QuesConfig;
   /**
@@ -108,7 +108,7 @@ export interface QuesSetting {
 }
 
 /* response---------------------------------------------- */
-export interface setNewQuestionnaireDetailResponse {
+export interface createQuestionnaireDetailResponse {
   code: number;
   data: any[] | boolean | number | number | { [key: string]: any } | null | string;
   msg: string;

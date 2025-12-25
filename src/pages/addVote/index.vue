@@ -31,7 +31,7 @@ import { onBeforeMount, ref } from "vue";
 import Vote from "./vote.vue";
 import { useEditVoteStore } from "@/stores/voteEdit.ts";
 import { useRequest } from "vue-hooks-plus";
-import { setNewQuestionnaireDetailAPI, setQuestionnaireDetailAPI } from "@/apis";
+import { createQuestionnaireDetailAPI, setQuestionnaireDetailAPI } from "@/apis";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { closeLoading, startLoading } from "@/utilities";
 import { ElNotification } from "element-plus";
@@ -60,7 +60,7 @@ const saveEdit = () => {
 };
 const submit = (state: number) => {
   schema.value.status = state;
-  useRequest(() => setNewQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
+  useRequest(() => createQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
     onSuccess(res: any) {
       if (res.code === 200 && res.msg === "OK") {
