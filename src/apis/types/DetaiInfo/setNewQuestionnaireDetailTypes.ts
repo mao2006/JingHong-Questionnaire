@@ -65,7 +65,6 @@ export interface QuesSetting {
   unique: boolean;
 }
 
-/* response---------------------------------------------- */
 export interface createQuestionnaireDetailResponse {
   code: number;
   data: any[] | boolean | number | number | { [key: string]: any } | null | string;

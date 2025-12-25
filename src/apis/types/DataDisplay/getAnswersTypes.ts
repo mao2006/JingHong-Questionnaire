@@ -22,7 +22,6 @@ export interface QuestionAnswer {
   question_type: number;
   title?: string;
 }
-/* request--------------------------------*/
 export interface GetAnswersRequest {
   /** 问卷编号 */
   id: number;
