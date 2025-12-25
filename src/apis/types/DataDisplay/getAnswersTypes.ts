@@ -17,26 +17,18 @@ export interface AnswersData {
 
 export interface QuestionAnswer {
   answers?: string[];
-  /**
-     * 1单选2多选3填空4简答5图片
-     */
+  /** 1单选2多选3填空4简答5图片 */
   question_type: number;
   title?: string;
 }
 /* request--------------------------------*/
 export interface GetAnswersRequest {
-  /**
-     * 问卷编号
-     */
+  /** 问卷编号 */
   id: number;
   page_num: number;
   page_size: number;
-  /**
-     * 查询内容
-     */
+  /** 查询内容 */
   text?: string;
-  /**
-     * 是否只显示最新的填写记录
-     */
+  /** 是否只显示最新的填写记录 */
   unique: boolean;
 }

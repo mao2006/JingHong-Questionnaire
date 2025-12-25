@@ -1,7 +1,5 @@
 export interface DelQuestionnaireRequest {
-  /**
-     * 问卷编号
-     */
+  /** 问卷编号 */
   id: number;
 }
 

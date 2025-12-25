@@ -11,45 +11,27 @@ export interface getQuestionnaireDetailResponse {
 export interface Data {
   base_config: BaseConfig;
   ques_config: QuesConfig;
-  /**
-     * 1草稿、2发布、3已截止
-     */
+  /** 1草稿、2发布、3已截止 */
   status: number;
-  /**
-     * 问卷类型，0调研问卷，1投票问卷
-     */
+  /** 问卷类型，0调研问卷，1投票问卷 */
   survey_type: number;
-  /**
-     * 问卷编号
-     */
+  /** 问卷编号 */
   uuid: string;
 }
 
 export interface BaseConfig {
-  /**
-     * 每日提交限制，当启用统一验证时生效
-     */
+  /** 每日提交限制，当启用统一验证时生效 */
   day_limit: number;
   end_time: string;
-  /**
-     * 是否在收到回答时发送邮件提醒
-     */
+  /** 是否在收到回答时发送邮件提醒 */
   need_notify: boolean;
-  /**
-     * 问卷开始时间，时间戳格式
-     */
+  /** 问卷开始时间，时间戳格式 */
   start_time: string;
-  /**
-     * 总提交次数限制，当启用统一验证时生效
-     */
+  /** 总提交次数限制，当启用统一验证时生效 */
   sum_limit: number;
-  /**
-     * 仅本科生，是否仅本科生
-     */
+  /** 仅本科生，是否仅本科生 */
   undergrad_only: boolean;
-  /**
-     * 是否统一登录验证
-     */
+  /** 是否统一登录验证 */
   verify: boolean;
 }
 

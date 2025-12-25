@@ -13,43 +13,27 @@ export interface GetStaticsDataResponse {
 export interface Data {
   statistics: Statistic[];
   survey_type: number;
-  /**
-     * 总数
-     */
+  /** 总数 */
   total: number;
-  /**
-     * 总页数
-     */
+  /** 总页数 */
   total_sum_page: number;
 }
 
 export interface Statistic {
   options: Option[];
-  /**
-     * 题目标题
-     */
+  /** 题目标题 */
   question: string;
-  /**
-     * 题目类型，1单选2多选
-     */
+  /** 题目类型，1单选2多选 */
   question_type: number;
-  /**
-     * 题目序号
-     */
+  /** 题目序号 */
   serial_num: number;
 }
 
 export interface Option {
-  /**
-     * 选项内容
-     */
+  /** 选项内容 */
   content: string;
-  /**
-     * 选人数
-     */
+  /** 选人数 */
   count: number;
-  /**
-     * 选项序号
-     */
+  /** 选项序号 */
   serial_num: number;
 }

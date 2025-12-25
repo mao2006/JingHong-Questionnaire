@@ -1,44 +1,26 @@
 export interface createQuestionnaireDetailRequest {
   base_config: BaseConfig;
   ques_config: QuesConfig;
-  /**
-     * 问卷状态，1草稿、2发布、3已截止
-     */
+  /** 问卷状态，1草稿、2发布、3已截止 */
   status: number;
-  /**
-     * 问卷类型，0调研1投票
-     */
+  /** 问卷类型，0调研1投票 */
   survey_type: number;
 }
 
 export interface BaseConfig {
-  /**
-     * 每日提交限制，当启用统一验证时生效
-     */
+  /** 每日提交限制，当启用统一验证时生效 */
   day_limit: number;
-  /**
-     * 结束时间，xxxx-xx-xxTxx:xx:xxZ
-     */
+  /** 结束时间，xxxx-xx-xxTxx:xx:xxZ */
   end_time: string;
-  /**
-     * 是否在收到回答时发送邮件提醒
-     */
+  /** 是否在收到回答时发送邮件提醒 */
   need_notify: boolean;
-  /**
-     * 开始时间，xxxx-xx-xxTxx:xx:xxZ
-     */
+  /** 开始时间，xxxx-xx-xxTxx:xx:xxZ */
   start_time: string;
-  /**
-     * 总提交次数限制，当启用统一验证时生效
-     */
+  /** 总提交次数限制，当启用统一验证时生效 */
   sum_limit: number;
-  /**
-     * 仅本科生，是否仅本科生
-     */
+  /** 仅本科生，是否仅本科生 */
   undergrad_only: boolean;
-  /**
-     * 是否统一登录验证
-     */
+  /** 是否统一登录验证 */
   verify: boolean;
 }
 
@@ -53,9 +35,7 @@ export interface QuestionList {
   img?: string;
   options?: Option[];
   ques_setting: QuesSetting;
-  /**
-     * 问题序号
-     */
+  /** 问题序号 */
   serial_num: number;
   subject?: string;
 }
@@ -64,40 +44,24 @@ export interface Option {
   content?: string;
   description?: string;
   img?: string;
-  /**
-     * 选项序号
-     */
+  /** 选项序号 */
   serial_num?: number;
 }
 
 export interface QuesSetting {
-  /**
-     * 多选所选最大限制数量，0为不限制
-     */
+  /** 多选所选最大限制数量，0为不限制 */
   maximum_option?: number;
-  /**
-     * 多选所选最小限制，0为不限制
-     */
+  /** 多选所选最小限制，0为不限制 */
   minimum_option?: number;
-  /**
-     * 是否有其他选项
-     */
+  /** 是否有其他选项 */
   other_option?: boolean;
-  /**
-     * 问题类型，调研问卷为1单选2多选3填空4简答5图片6文件。  投票问卷为1投票
-     */
+  /** 问题类型，调研问卷为1单选2多选3填空4简答5图片6文件。  投票问卷为1投票 */
   question_type: number;
-  /**
-     * 正则表达式
-     */
+  /** 正则表达式 */
   reg: string;
-  /**
-     * 是否必须作答
-     */
+  /** 是否必须作答 */
   required: boolean;
-  /**
-     * 是否唯一
-     */
+  /** 是否唯一 */
   unique: boolean;
 }
 
