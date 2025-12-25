@@ -265,7 +265,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { getUserAPI, setUserSubmitAPI } from "@/apis";
+import { getQuestionnaireAPI, setUserSubmitAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -403,7 +403,7 @@ const getQuestionnaireView = async () => {
   if (decryptedId.value) {
     startLoading();
     try {
-      const res = await getUserAPI({ id: decryptedId.value as number }); // 直接 `await` API 请求
+      const res = await getQuestionnaireAPI({ id: decryptedId.value as number }); // 直接 `await` API 请求
       if (res.code === 200) {
         formData.value = res.data;
         question.value = formData.value.questions;

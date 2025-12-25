@@ -1,11 +1,11 @@
-export interface GetUserRequest {
+export interface GetQuestionnaireRequest {
   /**
      * 问卷编号
      */
   id: number | null;
 }
 
-export interface GetUserResponse {
+export interface GetQuestionnaireResponse {
   code: number;
   data: Data | null;
   msg?: string;

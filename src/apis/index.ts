@@ -10,7 +10,7 @@ import saveImgAPI from "@/apis/service/saveImg.ts";
 import createQuestionnaireDetailAPI from "@/apis/service/DetailInfo/createQuestionnaireDetailAPI.ts";
 import getDatatableAPI from "./service/DataDisplay/getDatatableAPI";
 import getStaticsDataAPI from "./service/DataDisplay/getStaticsDataAPI";
-import getUserAPI from "./service/User/getUserApi";
+import getQuestionnaireAPI from "./service/User/getQuestionnaireAPI";
 import setUserSubmitAPI from "./service/User/setUserSubmit";
 export {
   loginAPI,
@@ -25,6 +25,6 @@ export {
   createQuestionnaireDetailAPI,
   getDatatableAPI,
   getStaticsDataAPI,
-  getUserAPI,
+  getQuestionnaireAPI,
   setUserSubmitAPI
 };
