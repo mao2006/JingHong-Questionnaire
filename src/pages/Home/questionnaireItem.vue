@@ -159,7 +159,7 @@ const updateQuestionnaireStatus = (id: number, status: QuesStatus.DRAFT | QuesSt
     id: id,
     status: status
   }), {
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         ElNotification.success("修改成功");
         updateList();
@@ -174,7 +174,7 @@ const updateQuestionnaireStatus = (id: number, status: QuesStatus.DRAFT | QuesSt
 const delQuestionnaire = (id: number) => {
   useRequest(() => delQuestionnaireAPI({ id: id }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         ElNotification("删除成功");
         updateList();

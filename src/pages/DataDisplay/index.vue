@@ -78,7 +78,7 @@ const downloadDatatable = () => {
   useRequest(() => getDatatableAPI({
     id: tempStore.checkId
   }), {
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         window.location.href = res.data;
       }

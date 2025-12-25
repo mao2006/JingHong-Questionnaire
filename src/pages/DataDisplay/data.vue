@@ -134,7 +134,7 @@ const getAnswers = () => {
     unique: props.isUnique
   }), {
     debounceWait: 400,
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         totalPageNum.value = res.data.total_page_num;
         answers.value = res.data.answers_data.question_answers;
@@ -143,7 +143,7 @@ const getAnswers = () => {
         answerIds.value = res.data.answers_data.answer_ids;
       }
     },
-    onError(e: any) {
+    onError(e) {
       ElNotification.error("获取失败，请重试" + e);
     }
   });
@@ -155,7 +155,7 @@ watch(props, getAnswers);
 const delAnswer = (answer_id: string) => {
   useRequest(() => delAnswerAPI({ answer_id: answer_id }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         ElNotification("删除成功");
         getAnswers();

@@ -64,7 +64,7 @@ const getQuestionnaireList = (title?: string) => {
     title: title
   }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         questionnaireList.value = res.data.survey_list;
         totalPageNum.value = res.data.total_page_num;

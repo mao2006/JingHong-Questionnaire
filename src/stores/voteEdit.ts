@@ -82,7 +82,7 @@ function useInitializeSchema(voteId: Ref<number>) {
   const { run } = useRequest(() => getQuestionnaireDetailAPI({ id: voteId.value }), {
     manual: true,
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         console.log("valueChanged");
         Object.assign(schema.value, deepSnakeToCamel(res.data));

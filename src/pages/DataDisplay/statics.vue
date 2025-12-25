@@ -49,14 +49,14 @@ const getAnswers = () => {
     page_num: pageNum.value,
     page_size: pageSize
   }), {
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         staticsData.value = res.data.statistics;
         totalNum.value = res.data.total;
         totalPageNum.value = res.data.total_sum_page;
       }
     },
-    onError(e: any) {
+    onError(e) {
       ElNotification.error("获取失败，请重试" + e);
     }
   });

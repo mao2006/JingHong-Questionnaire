@@ -45,7 +45,7 @@ const state = ref("edit");
 const saveEdit = () => {
   useRequest(() => setQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         ElNotification.success("保存成功");
         router.push("/admin");
@@ -62,7 +62,7 @@ const submit = (state: number) => {
   schema.value.status = state;
   useRequest(() => createQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         if (state === 1) {
           ElNotification.success("创建并保存为草稿成功");

@@ -64,7 +64,7 @@ function useInitializeSchema(surveyId: Ref<number>) {
   const { run } = useRequest(() => getQuestionnaireDetailAPI({ id: surveyId.value }), {
     manual: true,
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         console.log("valueChanged");
         schema.value = deepSnakeToCamel(res.data);
