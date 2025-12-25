@@ -8,12 +8,10 @@ export interface UpdateQuestionnaireStatusRequest {
      */
   status: 1 | 2 | number,
   // status: number;
-  [property: string]: any;
 }
 
 export interface UpdateQuestionnaireStatusResponse {
   code: number;
   data: null | string;
   msg: string;
-  [property: string]: any;
 }

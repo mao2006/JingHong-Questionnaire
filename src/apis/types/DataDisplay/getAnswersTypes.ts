@@ -2,20 +2,17 @@ export interface GetAnswersResponse {
   code: number;
   data: Data;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
   answers_data: AnswersData;
   survey_type: number;
   total_page_num: number;
-  [property: string]: any;
 }
 
 export interface AnswersData {
   question_answers: QuestionAnswer[];
   time: string[];
-  [property: string]: any;
 }
 
 export interface QuestionAnswer {
@@ -25,7 +22,6 @@ export interface QuestionAnswer {
      */
   question_type: number;
   title?: string;
-  [property: string]: any;
 }
 /* request--------------------------------*/
 export interface GetAnswersRequest {
@@ -43,5 +39,4 @@ export interface GetAnswersRequest {
      * 是否只显示最新的填写记录
      */
   unique: boolean;
-  [property: string]: any;
 }

@@ -11,14 +11,12 @@ export interface VerifyRequest {
      * 学号
      */
   stu_id: string;
-  [property: string]: any;
 }
 
 export interface VerifyResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
@@ -31,5 +29,4 @@ export interface Data {
      */
   sum_limit: number;
   token: string;
-  [property: string]: any;
 }

@@ -3,7 +3,6 @@ export interface GetDatatableRequest {
      * 问卷编号
      */
   id: number;
-  [property: string]: any;
 }
 
 export interface GetDatatableResponse {
@@ -13,6 +12,5 @@ export interface GetDatatableResponse {
      */
   data: string | null;
   msg: string;
-  [property: string]: any;
 }
 

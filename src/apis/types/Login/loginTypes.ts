@@ -1,7 +1,6 @@
 export interface LoginRequest {
   password: string;
   username: string;
-  [property: string]: any;
 }
 
 export interface LoginResponse {
@@ -11,5 +10,4 @@ export interface LoginResponse {
      */
   data: null | string;
   msg: string;
-  [property: string]: any;
 }

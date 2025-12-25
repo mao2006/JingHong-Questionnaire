@@ -3,14 +3,12 @@ export interface GetUserRequest {
      * 问卷编号
      */
   id: number | null;
-  [property: string]: any;
 }
 
 export interface GetUserResponse {
   code: number;
   data: Data | null;
   msg?: string;
-  [property: string]: any;
 }
 
 export interface Data {
@@ -25,7 +23,6 @@ export interface Data {
      * 问卷类型，0调研问卷，1投票问卷
      */
   survey_type: number;
-  [property: string]: any;
 }
 
 export interface BaseConfig {
@@ -47,7 +44,6 @@ export interface BaseConfig {
      * 是否统一登录验证
      */
   verify: boolean;
-  [property: string]: any;
 }
 
 export interface QuesConfig {
@@ -57,7 +53,6 @@ export interface QuesConfig {
      */
   question_list: QuestionList[];
   title: string;
-  [property: string]: any;
 }
 
 export interface QuestionList {
@@ -83,7 +78,6 @@ export interface QuestionList {
      * 问题题目
      */
   subject?: string;
-  [property: string]: any;
 }
 
 export interface Option {
@@ -107,7 +101,6 @@ export interface Option {
      * 选项序号
      */
   serial_num?: number;
-  [property: string]: any;
 }
 
 export interface QuesSetting {
@@ -139,5 +132,4 @@ export interface QuesSetting {
      * 是否唯一
      */
   unique: boolean;
-  [property: string]: any;
 }

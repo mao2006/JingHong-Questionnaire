@@ -6,14 +6,12 @@ interface BaseConfig {
   endTime: string;
   startTime: string;
   verify: boolean;
-  [property: string]: any;
 }
 
 interface QuesConfig {
   desc: string;
   questionList: Question[];
   title: string;
-  [property: string]: any;
 }
 
 interface Option {
@@ -21,7 +19,6 @@ interface Option {
   content: string;
   description?: string;
   img?: string;
-  [property: string]: any;
 }
 
 // 基础问题类型

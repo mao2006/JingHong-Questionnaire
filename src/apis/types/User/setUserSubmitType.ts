@@ -11,7 +11,6 @@ export interface SetUserSubmitRequest {
      * 包含学号信息的token
      */
   token: string;
-  [property: string]: any;
 }
 
 export interface QuestionsList {
@@ -23,14 +22,12 @@ export interface QuestionsList {
      * 问题编号
      */
   question_id: number;
-  [property: string]: any;
 }
 
 export interface SetUserSubmitResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
@@ -38,7 +35,6 @@ export interface Data {
      * 提交时间
      */
   time: string;
-  [property: string]: any;
 }
 
 /* import { request } from "@/apis/axios";

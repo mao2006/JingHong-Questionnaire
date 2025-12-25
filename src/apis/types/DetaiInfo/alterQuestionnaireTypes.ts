@@ -9,7 +9,6 @@ export interface AlterQuestionnaireRequest {
      * 问卷类型，0调研1投票
      */
   survey_type: number;
-  [property: string]: any;
 }
 
 export interface BaseConfig {
@@ -41,14 +40,12 @@ export interface BaseConfig {
      * 是否统一登录验证
      */
   verify: boolean;
-  [property: string]: any;
 }
 
 export interface QuesConfig {
   desc: string;
   question_list: QuestionList[];
   title: string;
-  [property: string]: any;
 }
 
 export interface QuestionList {
@@ -61,7 +58,6 @@ export interface QuestionList {
      */
   serial_num: number;
   subject?: string;
-  [property: string]: any;
 }
 
 export interface Option {
@@ -72,7 +68,6 @@ export interface Option {
      * 选项序号
      */
   serial_num?: number;
-  [property: string]: any;
 }
 
 export interface QuesSetting {
@@ -104,12 +99,10 @@ export interface QuesSetting {
      * 是否唯一
      */
   unique: boolean;
-  [property: string]: any;
 }
 
 export interface AlterQuestionnaireResponse {
   code: number;
   data: any[] | boolean | number | number | { [key: string]: any } | null | string;
   msg: string;
-  [property: string]: any;
 }

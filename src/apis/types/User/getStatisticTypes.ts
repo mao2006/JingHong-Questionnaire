@@ -3,19 +3,16 @@ export interface GetStatisticRequest {
      * 问卷编号
      */
   id: number;
-  [property: string]: any;
 }
 
 export interface GetStatisticResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
   statistics: Statistic[];
-  [property: string]: any;
 }
 
 export interface Statistic {
@@ -32,7 +29,6 @@ export interface Statistic {
      * 题目序号
      */
   serial_num: number;
-  [property: string]: any;
 }
 
 export interface Option {
@@ -49,5 +45,4 @@ export interface Option {
      * 选项序号
      */
   serial_num: number;
-  [property: string]: any;
 }

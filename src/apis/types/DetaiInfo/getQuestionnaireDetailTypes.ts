@@ -1,13 +1,11 @@
 export interface GetQuestionnaireDetailRequest {
   id: number;
-  [property: string]: any;
 }
 
 export interface getQuestionnaireDetailResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
@@ -25,7 +23,6 @@ export interface Data {
      * 问卷编号
      */
   uuid: string;
-  [property: string]: any;
 }
 
 export interface BaseConfig {
@@ -54,14 +51,12 @@ export interface BaseConfig {
      * 是否统一登录验证
      */
   verify: boolean;
-  [property: string]: any;
 }
 
 export interface QuesConfig {
   desc: string;
   question_list: QuestionList[];
   title: string;
-  [property: string]: any;
 }
 
 export interface QuestionList {
@@ -72,7 +67,6 @@ export interface QuestionList {
   ques_setting: QuesSetting;
   serial_num: number;
   subject?: string;
-  [property: string]: any;
 }
 
 export interface Option {
@@ -81,7 +75,6 @@ export interface Option {
   id?: number;
   img?: string;
   serial_num?: number;
-  [property: string]: any;
 }
 
 export interface QuesSetting {
@@ -92,5 +85,4 @@ export interface QuesSetting {
   reg: string;
   required: boolean;
   unique: boolean;
-  [property: string]: any;
 }

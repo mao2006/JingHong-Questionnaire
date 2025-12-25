@@ -2,13 +2,11 @@ export interface GetQuestionnaireListResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
   survey_list: SurveyList[];
   total_page_num: number;
-  [property: string]: any;
 }
 
 export interface SurveyList {
@@ -32,12 +30,10 @@ export interface SurveyList {
      * 问卷标题
      */
   title: string;
-  [property: string]: any;
 }
 
 export interface GetQuestionnaireListResquest {
   page_num: number,
   page_size: number,
   title?: string
-  [property: string]: any;
 }

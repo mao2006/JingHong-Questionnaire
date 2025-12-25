@@ -2,14 +2,12 @@ export interface GetStaticsDataRequest {
   id?: number;
   page_num: number;
   page_size: number;
-  [property: string]: any;
 }
 
 export interface GetStaticsDataResponse {
   code: number;
   data: Data | null;
   msg: string;
-  [property: string]: any;
 }
 
 export interface Data {
@@ -23,7 +21,6 @@ export interface Data {
      * 总页数
      */
   total_sum_page: number;
-  [property: string]: any;
 }
 
 export interface Statistic {
@@ -40,7 +37,6 @@ export interface Statistic {
      * 题目序号
      */
   serial_num: number;
-  [property: string]: any;
 }
 
 export interface Option {
@@ -56,5 +52,4 @@ export interface Option {
      * 选项序号
      */
   serial_num: number;
-  [property: string]: any;
 }
