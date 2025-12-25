@@ -6,7 +6,7 @@ export interface GetStaticsDataRequest {
 
 export interface GetStaticsDataResponse {
   code: number;
-  data: Data | null;
+  data: Data;
   msg: string;
 }
 

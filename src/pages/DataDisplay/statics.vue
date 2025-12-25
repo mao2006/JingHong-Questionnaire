@@ -50,11 +50,12 @@ const getAnswers = () => {
     page_size: pageSize
   }), {
     onSuccess(res) {
-      if (res.code === 200) {
-        staticsData.value = res.data.statistics;
-        totalNum.value = res.data.total;
-        totalPageNum.value = res.data.total_sum_page;
+      if (res.code !== 200) {
+        throw new Error(res.msg);
       }
+      staticsData.value = res.data.statistics;
+      totalNum.value = res.data.total;
+      totalPageNum.value = res.data.total_sum_page;
     },
     onError(e) {
       ElNotification.error("获取失败，请重试" + e);

@@ -1,6 +1,6 @@
 export interface GetQuestionnaireListResponse {
   code: number;
-  data: Data | null;
+  data: Data;
   msg: string;
 }
 

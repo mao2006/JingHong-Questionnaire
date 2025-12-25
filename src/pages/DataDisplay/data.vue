@@ -33,7 +33,7 @@
       </thead>
       <tbody>
         <tr v-for="(t, index) in time" class="relative">
-          <th>{{ index+1 }}</th>
+          <th>{{ index + 1 }}</th>
           <th>{{ t }}</th>
           <th v-for="ans in answers">
             <div v-if="ans.question_type!==5">
@@ -122,7 +122,7 @@ const pageSize = ref(10);
 const answers = ref();
 const answerIds = ref();
 const answerIndexToDel = ref();
-const time = ref();
+const time = ref<string[]>();
 const type = ref(QuesType.SURVEY);
 
 const getAnswers = () => {
@@ -139,8 +139,8 @@ const getAnswers = () => {
         totalPageNum.value = res.data.total_page_num;
         answers.value = res.data.answers_data.question_answers;
         time.value = res.data.answers_data.time;
-        type.value = res.data.question_type;
-        answerIds.value = res.data.answers_data.answer_ids;
+        type.value = res.data.survey_type;
+        answerIds.value = res.data.answers_data.answerIds;
       }
     },
     onError(e) {

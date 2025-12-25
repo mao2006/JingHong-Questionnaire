@@ -52,7 +52,7 @@ const loading = ref(true);
 const surveyType = ref(tempStore.surveyType);
 const { setSurveyId, init } = useEditStore();
 watch(surveyType, () => {
-  tempStore.surveyType = surveyType;
+  tempStore.surveyType = surveyType.value;
 });
 onMounted(() => {
   loginStore.setShowHeader(true);
@@ -65,11 +65,12 @@ const getQuestionnaireList = (title?: string) => {
   }), {
     onBefore: () => startLoading(),
     onSuccess(res) {
-      if (res.code === 200) {
-        questionnaireList.value = res.data.survey_list;
-        totalPageNum.value = res.data.total_page_num;
-        loading.value = false;
+      if (res.code !== 200) {
+        throw new Error(res.msg);
       }
+      questionnaireList.value = res.data.survey_list;
+      totalPageNum.value = res.data.total_page_num;
+      loading.value = false;
     },
     onFinally: () => closeLoading()
   });
