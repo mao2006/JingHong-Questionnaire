@@ -1,12 +1,12 @@
 import { request } from "@/apis/axios";
-import { GetDatatableRequest, GetDatatableResponse } from "@/apis/types/DataDisplay/getDatatableTypes";
+import { GetDataTableRequest, GetDataTableResponse } from "@/apis/types/DataDisplay/getDataTableTypes";
 
-const getDatatableAPI = (data: GetDatatableRequest):
-Promise<GetDatatableResponse> => {
+const getDataTableAPI = (data: GetDataTableRequest):
+Promise<GetDataTableResponse> => {
   return request("/api/admin/download", {
     params: data,
     method: "GET"
   });
 };
 
-export { getDatatableAPI };
+export { getDataTableAPI };
