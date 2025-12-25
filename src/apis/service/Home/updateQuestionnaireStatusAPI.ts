@@ -9,4 +9,4 @@ Promise<UpdateQuestionnaireStatusResponse> => {
   });
 };
 
-export default updateQuestionnaireStatusAPI;
+export { updateQuestionnaireStatusAPI };

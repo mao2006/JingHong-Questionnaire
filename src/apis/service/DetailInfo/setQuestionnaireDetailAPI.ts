@@ -10,4 +10,4 @@ Promise<SetQuestionnaireDetailResponse> => {
   });
 };
 
-export default setQuestionnaireDetailAPI;
+export { setQuestionnaireDetailAPI };

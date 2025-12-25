@@ -9,4 +9,4 @@ Promise<VerifyResponse> => {
   });
 };
 
-export default verifyAPI;
+export { verifyAPI };

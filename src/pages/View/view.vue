@@ -265,7 +265,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { getQuestionnaireAPI, setUserSubmitAPI } from "@/apis";
+import { getQuestionnaireAPI, setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -281,9 +281,7 @@ import CryptoJS from "crypto-js";
 import { useMainStore } from "@/stores";
 // 暗黑模式hook
 import { useDarkModeSwitch } from "@/utilities/darkModeSwitch";
-import verifyAPI from "@/apis/service/User/verifyAPI";
 import Vote from "@/pages/View/vote.vue";
-import { getStatisticAPI } from "@/apis/service/User/getStatisticAPI";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";

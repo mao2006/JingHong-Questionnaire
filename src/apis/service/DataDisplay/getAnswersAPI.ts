@@ -9,4 +9,4 @@ Promise<GetAnswersResponse> => {
   });
 };
 
-export default getAnswersAPI;
+export { getAnswersAPI };

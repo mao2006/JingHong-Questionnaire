@@ -9,4 +9,4 @@ Promise<DelAnswerResponse> => {
   });
 };
 
-export default delAnswerAPI;
+export { delAnswerAPI };

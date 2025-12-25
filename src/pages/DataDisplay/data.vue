@@ -87,9 +87,8 @@
 <script setup lang="ts">
 import { modal, showModal } from "@/components";
 import { closeLoading, startLoading } from "@/utilities";
-import { delAnswerAPI } from "@/apis";
+import { delAnswerAPI, getAnswersAPI } from "@/apis";
 import { ElNotification, ElPagination } from "element-plus";
-import { getAnswersAPI } from "@/apis";
 import { ref, watch } from "vue";
 import { useMainStore } from "@/stores";
 import { useRequest } from "vue-hooks-plus";

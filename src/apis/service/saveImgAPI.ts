@@ -11,4 +11,4 @@ Promise<saveImgResponse> => {
     }
   });
 };
-export default saveImgAPI;
+export { saveImgAPI };

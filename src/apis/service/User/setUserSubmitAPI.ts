@@ -9,4 +9,4 @@ Promise<SetUserSubmitResponse> => {
   });
 };
 
-export default setUserSubmitAPI;
+export { setUserSubmitAPI };

@@ -8,4 +8,4 @@ const loginAPI = (data: LoginRequest): Promise<LoginResponse> => {
   });
 };
 
-export default loginAPI;
+export { loginAPI };

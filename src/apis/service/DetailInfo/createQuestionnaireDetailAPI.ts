@@ -9,4 +9,4 @@ Promise<createQuestionnaireDetailResponse> => {
   });
 };
 
-export default createQuestionnaireDetailAPI;
+export { createQuestionnaireDetailAPI };

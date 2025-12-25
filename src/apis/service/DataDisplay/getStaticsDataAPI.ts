@@ -9,4 +9,4 @@ Promise<GetStaticsDataResponse> => {
   });
 };
 
-export default getStaticsDataAPI;
+export { getStaticsDataAPI };

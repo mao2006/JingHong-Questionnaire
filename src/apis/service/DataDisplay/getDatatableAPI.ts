@@ -9,4 +9,4 @@ Promise<GetDatatableResponse> => {
   });
 };
 
-export default getDatatableAPI;
+export { getDatatableAPI };

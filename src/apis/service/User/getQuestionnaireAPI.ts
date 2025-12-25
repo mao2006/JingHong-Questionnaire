@@ -10,4 +10,4 @@ Promise<GetQuestionnaireResponse> => {
   });
 };
 
-export default getQuestionnaireAPI;
+export { getQuestionnaireAPI };
