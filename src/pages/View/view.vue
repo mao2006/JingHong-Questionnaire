@@ -265,7 +265,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { getUserAPI, setUserSubmitAPI } from "@/apis";
+import { getQuestionnaireAPI, setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -281,9 +281,7 @@ import CryptoJS from "crypto-js";
 import { useMainStore } from "@/stores";
 // 暗黑模式hook
 import { useDarkModeSwitch } from "@/utilities/darkModeSwitch";
-import verifyAPI from "@/apis/service/User/verifyApi.ts";
 import Vote from "@/pages/View/vote.vue";
-import getStatistic from "@/apis/service/User/getStatistic.ts";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
@@ -403,7 +401,7 @@ const getQuestionnaireView = async () => {
   if (decryptedId.value) {
     startLoading();
     try {
-      const res = await getUserAPI({ id: decryptedId.value as number }); // 直接 `await` API 请求
+      const res = await getQuestionnaireAPI({ id: decryptedId.value as number }); // 直接 `await` API 请求
       if (res.code === 200) {
         formData.value = res.data;
         question.value = formData.value.questions;
@@ -419,7 +417,7 @@ const getQuestionnaireView = async () => {
 
         if (showData.value.surveyType === QuesType.VOTE) {
           try {
-            const statRes = await getStatistic({ id: Number(decryptedId.value) });
+            const statRes = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = statRes.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e);
@@ -506,7 +504,7 @@ const submit = () => {
           await router.push("/Thank");
         } else {
           try {
-            const res = await getStatistic({ id: Number(decryptedId.value) });
+            const res = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = res.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e);

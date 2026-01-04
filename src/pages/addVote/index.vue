@@ -31,7 +31,7 @@ import { onBeforeMount, ref } from "vue";
 import Vote from "./vote.vue";
 import { useEditVoteStore } from "@/stores/voteEdit.ts";
 import { useRequest } from "vue-hooks-plus";
-import { setNewQuestionnaireDetailAPI, setQuestionnaireDetailAPI } from "@/apis";
+import { createQuestionnaireDetailAPI, setQuestionnaireDetailAPI } from "@/apis";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { closeLoading, startLoading } from "@/utilities";
 import { ElNotification } from "element-plus";
@@ -45,7 +45,7 @@ const state = ref("edit");
 const saveEdit = () => {
   useRequest(() => setQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         ElNotification.success("保存成功");
         router.push("/admin");
@@ -60,9 +60,9 @@ const saveEdit = () => {
 };
 const submit = (state: number) => {
   schema.value.status = state;
-  useRequest(() => setNewQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
+  useRequest(() => createQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         if (state === 1) {
           ElNotification.success("创建并保存为草稿成功");

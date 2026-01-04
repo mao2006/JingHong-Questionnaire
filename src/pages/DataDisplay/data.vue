@@ -33,7 +33,7 @@
       </thead>
       <tbody>
         <tr v-for="(t, index) in time" class="relative">
-          <th>{{ index+1 }}</th>
+          <th>{{ index + 1 }}</th>
           <th>{{ t }}</th>
           <th v-for="ans in answers">
             <div v-if="ans.question_type!==5">
@@ -88,9 +88,8 @@
 <script setup lang="ts">
 import { modal, showModal } from "@/components";
 import { closeLoading, startLoading } from "@/utilities";
-import { delAnswerAPI } from "@/apis";
+import { delAnswerAPI, getAnswersAPI } from "@/apis";
 import { ElNotification, ElPagination } from "element-plus";
-import { getAnswersAPI } from "@/apis";
 import { ref, watch } from "vue";
 import { useMainStore } from "@/stores";
 import { useRequest } from "vue-hooks-plus";
@@ -124,7 +123,7 @@ const pageSize = ref(10);
 const answers = ref();
 const answerIds = ref();
 const answerIndexToDel = ref();
-const time = ref();
+const time = ref<string[]>();
 const type = ref(QuesType.SURVEY);
 
 const getAnswers = () => {
@@ -136,16 +135,16 @@ const getAnswers = () => {
     unique: props.isUnique
   }), {
     debounceWait: 400,
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         totalPageNum.value = res.data.total_page_num;
         answers.value = res.data.answers_data.question_answers;
         time.value = res.data.answers_data.time;
-        type.value = res.data.question_type;
-        answerIds.value = res.data.answers_data.answer_ids;
+        type.value = res.data.survey_type;
+        answerIds.value = res.data.answers_data.answerIds;
       }
     },
-    onError(e: any) {
+    onError(e) {
       ElNotification.error("获取失败，请重试" + e);
     }
   });
@@ -157,7 +156,7 @@ watch(props, getAnswers);
 const delAnswer = (answer_id: string) => {
   useRequest(() => delAnswerAPI({ answer_id: answer_id }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         ElNotification("删除成功");
         getAnswers();
