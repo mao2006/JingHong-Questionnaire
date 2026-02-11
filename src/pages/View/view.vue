@@ -248,7 +248,7 @@
           </div>
           <div>
             <el-button
-              v-if="showData && !showData.baseConfig.verify || tokenOutDate"
+              v-if="showData && !showData.baseConfig.verify || isTokenValid"
               class="btn bg-red-800 text-red-50 w-full hover:bg-red-600 rounded-none h-40 min-h-0"
               :disabled="disabledInput"
               @click="submit"
@@ -273,7 +273,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
+import { setUserSubmitAPI, getStatisticAPI, verifyAPI, getQuestionnaireAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -391,7 +391,7 @@ const submit = () => {
           await router.push("/Thank");
         } else {
           try {
-            const res = await getStatistic({ id: Number(decryptedId.value) });
+            const res = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = res.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e instanceof Error ? e.message : String(e));
@@ -442,7 +442,7 @@ const getQuestionnaireView = async () => {
   if (decryptedId.value) {
     startLoading();
     try {
-      const res = await getUserAPI({ id: Number(decryptedId.value) });
+      const res = await getQuestionnaireAPI({ id: Number(decryptedId.value) });
       if (res.code === 200) {
         formData.value = res.data;
         showData.value = deepSnakeToCamel(res.data);
