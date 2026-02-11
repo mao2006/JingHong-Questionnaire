@@ -4,6 +4,7 @@
     class="modal z-10"
     @cancel="onCancel"
     @click.self="onBackdrop"
+    @keydown.escape="onEscapeKey"
   >
     <div class="bg-gray-300 dark:bg-customGray_shallow modal-box" :class="{ 'bg-white': white, 'rounded-none': unRounded, 'pb-0 pt-[1rem]': noPb }">
       <form v-if="!noClose" method="dialog">
@@ -51,5 +52,11 @@ const onCancel = (e: Event) => {
   }
 };
 
-
+/** ESC 事件处理：根据 noClose 决定是否阻止 */
+const onEscapeKey = (e: Event) => {
+  if (props.noClose) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+};
 </script>
