@@ -380,8 +380,8 @@ const submit = () => {
     onBefore: () => startLoading(),
     async onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
-        const { useImageStore, useOptionStore } = useMainStore();
-        const questionnaireStore = useMainStore().useQuetionnaireStore();
+        const { useImageStore, useOptionStore, useQuetionnaireStore } = useMainStore();
+        const questionnaireStore = useQuetionnaireStore();
         ElNotification.success("提交成功");
         questionnaireStore.deleteAnswer(decryptedId.value);
         useImageStore().clearFiles();
@@ -394,7 +394,7 @@ const submit = () => {
             const res = await getStatistic({ id: Number(decryptedId.value) });
             resultData.value = res.data.statistics[0].options;
           } catch (e) {
-            ElNotification.error(e);
+            ElNotification.error(e instanceof Error ? e.message : String(e));
           }
         }
       } else {
@@ -440,7 +440,7 @@ const getQuestionnaireView = async () => {
   if (decryptedId.value) {
     startLoading();
     try {
-      const res = await getUserAPI({ id: decryptedId.value as number }); 
+      const res = await getUserAPI({ id: Number(decryptedId.value) });
       if (res.code === 200) {
         formData.value = res.data;
         showData.value = deepSnakeToCamel(res.data);
@@ -455,7 +455,7 @@ const getQuestionnaireView = async () => {
             const statRes = await getStatistic({ id: Number(decryptedId.value) });
             resultData.value = statRes.data.statistics[0].options;
           } catch (e) {
-            ElNotification.error(e);
+            ElNotification.error(e instanceof Error ? e.message : String(e));
           }
         }
 
