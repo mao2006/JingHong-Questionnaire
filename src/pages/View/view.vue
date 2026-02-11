@@ -338,10 +338,11 @@ const ensureAuth = () => {
 const verify = () => {
   useRequest(() => verifyAPI(verifyData.value), {
     onBefore: () => {
-      disabledInput.value = true; startLoading();
+      disabledInput.value = true;
+      startLoading();
     },
     onSuccess: (res) => {
-      if (res.code === 200) {
+      if (res.code === 200 && res.data) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("timestamp", String(Date.now()));
         tokenTimestamp.value = Date.now();
@@ -429,7 +430,7 @@ onMounted(async () => {
   }
 });
 
-const decryptId = (encryptedId) => {
+const decryptId = (encryptedId: string) => {
   try {
     const bytes = CryptoJS.AES.decrypt(encryptedId, KEY);
     return bytes.toString(CryptoJS.enc.Utf8);

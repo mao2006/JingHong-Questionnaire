@@ -35,11 +35,11 @@ export interface BaseConfig {
 export interface QuesConfig {
   desc: string;
   /** 问题列表 */
-  question_list: QuestionList[];
+  question_list: Question[];
   title: string;
 }
 
-export interface QuestionList {
+export interface Question {
   /** 问题描述 */
   description?: string;
   /** 题目编号 */
