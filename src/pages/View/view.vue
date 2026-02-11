@@ -457,8 +457,6 @@ const getQuestionnaireView = async () => {
           answer: ""
         }));
 
-        // console.log(showData.value);
-
         if (showData.value.surveyType === QuesType.VOTE) {
           try {
             const statRes = await getStatisticAPI({ id: Number(decryptedId.value) });
