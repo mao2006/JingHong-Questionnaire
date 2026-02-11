@@ -204,10 +204,9 @@ import { ElNotification } from "element-plus";
 import { showModal, modal } from "@/components";
 import router from "@/router";
 import { useRequest } from "vue-hooks-plus";
-import { 
-  setNewQuestionnaireDetailAPI, 
+import {
   setQuestionnaireDetailAPI,
-  updateQuestionnaireStatusAPI 
+  updateQuestionnaireStatusAPI
 } from "@/apis";
 import { createQuestionnaireDetailAPI } from "@/apis";
 import { closeLoading, startLoading } from "@/utilities";
@@ -245,7 +244,7 @@ const activeDelete = (index: number) => {
 const mode = ref("ques");
 
 // 创建问卷 Hook
-const { run: runCreate } = useRequest(setNewQuestionnaireDetailAPI, {
+const { run: runCreate } = useRequest(createQuestionnaireDetailAPI, {
   manual: true,
   onBefore: () => startLoading(),
   onSuccess(res: any) {
@@ -325,16 +324,16 @@ const submit = async (state: number) => {
     try {
       const data = deepCamelToSnake(schema.value);
       data.id = surveyId.value; // 确保 ID 存在
-      
+
       // 1. 更新内容
       const contentRes = await setQuestionnaireDetailAPI(data) as any;
       if (contentRes.code !== 200) {
         throw new Error(contentRes.msg || "保存内容失败");
       }
-      
+
       // 2. 更新状态
       runUpdateStatus({ id: surveyId.value, status: state as 1 | 2 });
-      
+
     } catch (e: any) {
       ElNotification.error(e.message || e);
       closeLoading();
