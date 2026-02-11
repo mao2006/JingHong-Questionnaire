@@ -273,7 +273,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { getQuestionnaireAPI, setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
+import { setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -307,10 +307,6 @@ const ans = ref({
 });
 const time = ref();
 const loading = ref(true);
-const submitData = ref({
-  id: null,
-  questions_list: []
-});
 const startTime = ref();
 const resultData = ref(undefined);
 const route = useRoute();
@@ -319,20 +315,13 @@ const decryptedId = ref<string | null>();
 const allowSend = ref(true);
 const isOutDate = ref(false);
 
-// 认证相关状态 
+// 认证相关状态
 const verifyData = ref({ stu_id: "", password: "", id: -1 });
 const tokenTimestamp = ref<number>(Number(localStorage.getItem("timestamp")) || 0);
 const disabledInput = ref(false);
 
-// 认证相关计算属性 
-const canVerify = computed(() => 
-  verifyData.value.stu_id.trim() &&
-  verifyData.value.password.trim() &&
-  verifyData.value.id !== -1
-);
-
 /** token 是否在有效期内 */
-const isTokenValid = computed(() => 
+const isTokenValid = computed(() =>
   tokenTimestamp.value && Date.now() - tokenTimestamp.value <= TOKEN_EXPIRATION_MS
 );
 
@@ -348,12 +337,14 @@ const ensureAuth = () => {
 // 认证接口请求
 const verify = () => {
   useRequest(() => verifyAPI(verifyData.value), {
-    onBefore: () => { disabledInput.value = true; startLoading(); },
+    onBefore: () => {
+      disabledInput.value = true; startLoading();
+    },
     onSuccess: (res) => {
       if (res.code === 200) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("timestamp", String(Date.now()));
-        tokenTimestamp.value = Date.now(); 
+        tokenTimestamp.value = Date.now();
         showModal("AuthOnly", true);
         ElNotification.success("认证成功");
       } else {
@@ -361,7 +352,9 @@ const verify = () => {
       }
     },
     onError: () => ElNotification.error("请求超时, 请稍后重试"),
-    onFinally: () => { disabledInput.value = false; closeLoading(); }
+    onFinally: () => {
+      disabledInput.value = false; closeLoading();
+    }
   });
 };
 
@@ -393,7 +386,7 @@ const submit = () => {
         questionnaireStore.deleteAnswer(decryptedId.value);
         useImageStore().clearFiles();
         useOptionStore().deleteOption(decryptedId.value);
-        
+
         if (formData.value.survey_type === 0) {
           await router.push("/Thank");
         } else {
@@ -409,7 +402,9 @@ const submit = () => {
       }
     },
     onError: (e) => ElNotification.error(e.message),
-    onFinally: () => { showModal("QuestionnaireSubmit", true); closeLoading(); }
+    onFinally: () => {
+      showModal("QuestionnaireSubmit", true); closeLoading();
+    }
   });
 };
 
@@ -430,13 +425,13 @@ onMounted(async () => {
   await getQuestionnaireView();
 
   if (showData.value?.baseConfig?.verify && !isTokenValid.value) {
-     showModal("AuthOnly");
-   }
+    showModal("AuthOnly");
+  }
 });
 
 const decryptId = (encryptedId) => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedId, KEY); 
+    const bytes = CryptoJS.AES.decrypt(encryptedId, KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
   } catch (error) {
     ElNotification.error("无效的问卷id" + error);
