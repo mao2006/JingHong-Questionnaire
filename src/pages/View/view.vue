@@ -208,10 +208,10 @@
           <span class="text-red-950 dark:text-red-500 text-[1.5rem]">提交问卷</span>
         </template>
 
-        <template v-if="(showData && !showData.baseConfig.verify) || tokenOutDate" #default>
+        <template v-if="(showData && !showData.baseConfig.verify) || isTokenValid" #default>
           你确认要提交问卷吗?
           <el-button
-            v-if="(showData && !showData.baseConfig.verify) || tokenOutDate"
+            v-if="(showData && !showData.baseConfig.verify) || isTokenValid"
             class="btn bg-red-800 text-red-50 w-full hover:bg-red-600 rounded-none h-40 min-h-0 mt-15"
             :disabled="disabledInput"
             @click="submit"
@@ -225,7 +225,7 @@
         white
         un-rounded
         no-pb
-        :hide-close="true"
+        no-close
       >
         <template #default>
           <div class="flex-col">
@@ -288,7 +288,9 @@ import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
 
 const { darkModeStatus, switchDarkMode } = useDarkModeSwitch();
-const Key = "JingHong";
+const KEY = "JingHong";
+/** token 有效期（7天，毫秒） */
+const TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 const formData = ref();
 const showData = ref();
@@ -323,14 +325,14 @@ const canVerify = computed(() =>
   verifyData.value.id !== -1
 );
 
-// token 有效期判断（7天）
-const tokenOutDate = computed(() => 
-  tokenTimestamp.value && Date.now() - tokenTimestamp.value <= 7 * 24 * 60 * 60 * 1000
+/** token 是否在有效期内 */
+const isTokenValid = computed(() => 
+  tokenTimestamp.value && Date.now() - tokenTimestamp.value <= TOKEN_EXPIRATION_MS
 );
 
 // 通用认证检查：若需要认证且 token 无效，弹窗并返回 false
 const ensureAuth = () => {
-  if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
+  if (showData.value?.baseConfig?.verify && !isTokenValid.value) {
     showModal("AuthOnly");
     return false;
   }
@@ -421,14 +423,14 @@ onMounted(async () => {
 
   await getQuestionnaireView();
 
-  if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
-    showModal("AuthOnly");
-  }
+  if (showData.value?.baseConfig?.verify && !isTokenValid.value) {
+     showModal("AuthOnly");
+   }
 });
 
 const decryptId = (encryptedId) => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedId, Key);
+    const bytes = CryptoJS.AES.decrypt(encryptedId, KEY); // ← 改为 KEY（全大写）
     return bytes.toString(CryptoJS.enc.Utf8);
   } catch (error) {
     ElNotification.error("无效的问卷id" + error);
