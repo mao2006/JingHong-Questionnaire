@@ -220,11 +220,12 @@
           </el-button>
         </template>
       </modal>
-      <modal-no-close
+      <modal
         modal-id="AuthOnly"
         white
         un-rounded
         no-pb
+        :hide-close="true"
       >
         <template #default>
           <div class="flex-col">
@@ -255,17 +256,17 @@
             </el-button>
           </div>
         </template>
-      </modal-no-close>
+      </modal>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRequest } from "vue-hooks-plus";
 import { getUserAPI, setUserSubmitAPI } from "@/apis";
 import { ElNotification } from "element-plus";
-import { modal, showModal, ModalNoClose } from "@/components";
+import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
 import Checkbox from "@/pages/View/checkbox.vue";
 import Fill from "@/pages/View/fill.vue";
@@ -285,10 +286,11 @@ import getStatistic from "@/apis/service/User/getStatistic.ts";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
+
 const { darkModeStatus, switchDarkMode } = useDarkModeSwitch();
 const Key = "JingHong";
+
 const formData = ref();
-const question = ref();
 const showData = ref();
 const ans = ref({
   id: -1,
@@ -308,30 +310,101 @@ const loginStore = useMainStore().useLoginStore();
 const decryptedId = ref<string | null>();
 const allowSend = ref(true);
 const isOutDate = ref(false);
-const verifyData = ref({
-  stu_id: "",
-  password: "",
-  id: -1
-});
-const optionStore = useMainStore().useOptionStore();
-const questionnaireStore = useMainStore().useQuetionnaireStore();
+
+// 认证相关状态 
+const verifyData = ref({ stu_id: "", password: "", id: -1 });
+const tokenTimestamp = ref<number>(Number(localStorage.getItem("timestamp")) || 0);
 const disabledInput = ref(false);
 
-// 新增：响应式保存本地时间戳，验证成功后更新
-const tokenTimestamp = ref<number>(localStorage.getItem("timestamp") ? Number(localStorage.getItem("timestamp")) : 0);
+// 认证相关计算属性 
+const canVerify = computed(() => 
+  verifyData.value.stu_id.trim() &&
+  verifyData.value.password.trim() &&
+  verifyData.value.id !== -1
+);
 
-// 新增/修改：控制认证按钮是否可用（学号/密码非空且有有效问卷 id）
-const canVerify = computed(() => {
-  return verifyData.value.stu_id?.toString().trim() !== "" &&
-         verifyData.value.password?.toString().trim() !== "" &&
-         verifyData.value.id && verifyData.value.id !== -1;
-});
+// token 有效期判断（7天）
+const tokenOutDate = computed(() => 
+  tokenTimestamp.value && Date.now() - tokenTimestamp.value <= 7 * 24 * 60 * 60 * 1000
+);
 
-// 修改：tokenOutDate 改为依赖 tokenTimestamp（响应式）
-const tokenOutDate = computed(() => {
-  const lastDate = tokenTimestamp.value;
-  return !!(lastDate && Date.now() - lastDate <= 7 * 24 * 60 * 60 * 1000);
-});
+// 通用认证检查：若需要认证且 token 无效，弹窗并返回 false
+const ensureAuth = () => {
+  if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
+    showModal("AuthOnly");
+    return false;
+  }
+  return true;
+};
+
+// 认证接口请求
+const verify = () => {
+  useRequest(() => verifyAPI(verifyData.value), {
+    onBefore: () => { disabledInput.value = true; startLoading(); },
+    onSuccess: (res) => {
+      if (res.code === 200) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("timestamp", String(Date.now()));
+        tokenTimestamp.value = Date.now(); 
+        showModal("AuthOnly", true);
+        ElNotification.success("认证成功");
+      } else {
+        ElNotification.error(res.msg);
+      }
+    },
+    onError: () => ElNotification.error("请求超时, 请稍后重试"),
+    onFinally: () => { disabledInput.value = false; closeLoading(); }
+  });
+};
+
+// 提交前检查认证状态
+const handleSubmit = () => {
+  checkAnswer();
+  if (!allowSend.value || !ensureAuth()) return;
+  showModal("QuestionnaireSubmit");
+};
+
+// 提交问卷
+const submit = () => {
+  checkAnswer();
+  if (!allowSend.value || !ensureAuth()) return;
+
+  ans.value.token = localStorage.getItem("token") ?? "";
+  ans.value.questionsList = showData.value.quesConfig.questionList.map((item) => ({
+    questionId: item.id,
+    answer: item.answer
+  }));
+
+  useRequest(() => setUserSubmitAPI(deepCamelToSnake(ans.value)), {
+    onBefore: () => startLoading(),
+    async onSuccess(res) {
+      if (res.code === 200 && res.msg === "OK") {
+        const { useImageStore, useOptionStore } = useMainStore();
+        const questionnaireStore = useMainStore().useQuetionnaireStore();
+        ElNotification.success("提交成功");
+        questionnaireStore.deleteAnswer(decryptedId.value);
+        useImageStore().clearFiles();
+        useOptionStore().deleteOption(decryptedId.value);
+        
+        if (formData.value.survey_type === 0) {
+          await router.push("/Thank");
+        } else {
+          try {
+            const res = await getStatistic({ id: Number(decryptedId.value) });
+            resultData.value = res.data.statistics[0].options;
+          } catch (e) {
+            ElNotification.error(e);
+          }
+        }
+      } else {
+        ElNotification.error(res.msg);
+      }
+    },
+    onError: (e) => ElNotification.error(e.message),
+    onFinally: () => { showModal("QuestionnaireSubmit", true); closeLoading(); }
+  });
+};
+
 onMounted(async () => {
   loginStore.setShowHeader(false);
 
@@ -339,59 +412,19 @@ onMounted(async () => {
   if (idParam) {
     const raw = idParam.replace(/ /g, "+");
     decryptedId.value = decryptId(raw) as string | null;
-    verifyData.value.id = Number(decryptedId.value);
-    if (decryptedId.value === "") {
+    if (!decryptedId.value) {
       ElNotification.error("无效的问卷id");
       return;
     }
+    verifyData.value.id = Number(decryptedId.value);
   }
 
-  await getQuestionnaireView(); // ① 先拉配置
+  await getQuestionnaireView();
 
-  // ② 再决定要不要弹认证（只在需要认证且 token 过期/不存在时弹窗）
   if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
     showModal("AuthOnly");
   }
 });
-
-const verify = () => {
-  // 前端可选校验已在其他处保证，这里直接请求
-  useRequest(() => verifyAPI(verifyData.value), {
-    onBefore() {
-      disabledInput.value = true;
-      startLoading();
-    },
-    onSuccess(res) {
-      if (res.code === 200) {
-        // 更新 token 和本地时间戳（同时更新响应式变量）
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("timestamp", String(Date.now()));
-        tokenTimestamp.value = Date.now(); // 更新响应式，触发模板重新判断
-
-        // 认证成功后关闭弹窗
-        showModal("AuthOnly", true);
-        ElNotification.success("认证成功");
-      } else {
-        ElNotification.error(res.msg);
-      }
-    },
-    onError() {
-      ElNotification.error("请求超时, 请稍后重试");
-    },
-    onFinally() {
-      disabledInput.value = false;
-      closeLoading();
-    }
-  });
-};
-
-watch(question, (newQuestions) => {
-  newQuestions.forEach(q => {
-    if (q.answer) {
-      questionnaireStore.updateAnswer(decryptedId.value, q.serial_num, q.answer);
-    }
-  });
-}, { deep: true });
 
 const decryptId = (encryptedId) => {
   try {
@@ -402,27 +435,13 @@ const decryptId = (encryptedId) => {
   }
 };
 
-const handleSubmit = () => {
-  checkAnswer();
-  if (!allowSend.value) return;
-
-  // 若问卷需要统一身份认证，但本地 token 已过期或不存在，先弹认证窗口
-  if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
-    showModal("AuthOnly");
-    return;
-  }
-
-  showModal("QuestionnaireSubmit");
-};
 const getQuestionnaireView = async () => {
   if (decryptedId.value) {
     startLoading();
     try {
-      const res = await getUserAPI({ id: decryptedId.value as number }); // 直接 `await` API 请求
+      const res = await getUserAPI({ id: decryptedId.value as number }); 
       if (res.code === 200) {
         formData.value = res.data;
-        question.value = formData.value.questions;
-        submitData.value.id = res.data.id;
         showData.value = deepSnakeToCamel(res.data);
 
         showData.value.quesConfig.questionList = showData.value.quesConfig.questionList.map(item => ({
@@ -491,59 +510,6 @@ const checkAnswer = () => {
     return;
   }
   allowSend.value = true;
-};
-
-const submit = () => {
-  checkAnswer();
-  if (allowSend.value === false) {
-    return;
-  }
-
-  // 再次保护：提交前如果需要认证但 token 无效，先弹认证窗口并中断提交
-  if (showData.value?.baseConfig?.verify && !tokenOutDate.value) {
-    showModal("AuthOnly");
-    return;
-  }
-
-  ans.value.token = localStorage.getItem("token") ?? "";
-  ans.value.questionsList = showData.value.quesConfig.questionList.map((item) => {
-    return {
-      questionId: item.id,
-      answer: item.answer
-    };
-  });
-  console.log(ans.value);
-  useRequest(() => setUserSubmitAPI(deepCamelToSnake(ans.value)), {
-    onBefore: () => startLoading(),
-    async onSuccess(res) {
-      if (res.code === 200 && res.msg === "OK") {
-        const imageStore = useMainStore().useImageStore();
-        ElNotification.success("提交成功");
-        questionnaireStore.deleteAnswer(decryptedId.value);
-        imageStore.clearFiles();
-        optionStore.deleteOption(decryptedId.value);
-        if (formData.value.survey_type === 0) {
-          await router.push("/Thank");
-        } else {
-          try {
-            const res = await getStatistic({ id: Number(decryptedId.value) });
-            resultData.value = res.data.statistics[0].options;
-          } catch (e) {
-            ElNotification.error(e);
-          }
-        }
-      } else {
-        ElNotification.error(res.msg);
-      }
-    },
-    onError(e) {
-      ElNotification.error(e.message);
-    },
-    onFinally: () => {
-      showModal("QuestionnaireSubmit", true);
-      closeLoading();
-    }
-  });
 };
 
 </script>
