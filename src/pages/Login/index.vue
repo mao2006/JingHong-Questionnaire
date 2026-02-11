@@ -81,7 +81,7 @@ const send = () => {
     password: password.value
   }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         ElNotification.success("登录成功");
         loginStore.setLogin(true);

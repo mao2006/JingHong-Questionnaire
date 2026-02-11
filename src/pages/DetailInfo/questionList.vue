@@ -209,6 +209,7 @@ import {
   setQuestionnaireDetailAPI,
   updateQuestionnaireStatusAPI 
 } from "@/apis";
+import { createQuestionnaireDetailAPI } from "@/apis";
 import { closeLoading, startLoading } from "@/utilities";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 

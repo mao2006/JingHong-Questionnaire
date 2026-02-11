@@ -13,7 +13,7 @@
         <div>
           {{ "问卷标题: " + tempStore.checkTitle }}
         </div>
-        <div class="btn btn-sm btn-accent dark:opacity-75" @click="downloadDatatable">
+        <div class="btn btn-sm btn-accent dark:opacity-75" @click="downloadDataTable">
           下载数据表格
         </div>
         <div class="btn btn-sm btn-accent dark:opacity-75" @click="switchCount">
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { getDatatableAPI } from "@/apis";
+import { getDataTableAPI } from "@/apis";
 import { ref } from "vue";
 import { useRequest } from "vue-hooks-plus";
 import router from "@/router";
@@ -74,11 +74,11 @@ const back = () => {
   router.push("/admin");
 };
 
-const downloadDatatable = () => {
-  useRequest(() => getDatatableAPI({
+const downloadDataTable = () => {
+  useRequest(() => getDataTableAPI({
     id: tempStore.checkId
   }), {
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200) {
         window.location.href = res.data;
       }

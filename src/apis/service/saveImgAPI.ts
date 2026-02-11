@@ -1,6 +1,8 @@
 import { request } from "@/apis/axios";
+import { saveImgResponse } from "../types/saveImgTypes";
 
-const saveImgAPI = (data: FormData | null) => {
+const saveImgAPI = (data: FormData | null):
+Promise<saveImgResponse> => {
   return request("/api/user/upload/img", {
     data: data,
     method: "POST",
@@ -9,4 +11,4 @@ const saveImgAPI = (data: FormData | null) => {
     }
   });
 };
-export default saveImgAPI;
+export { saveImgAPI };
