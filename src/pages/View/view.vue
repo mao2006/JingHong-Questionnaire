@@ -289,7 +289,6 @@ import { QuesType } from "@/utilities/constMap.ts";
 
 const { darkModeStatus, switchDarkMode } = useDarkModeSwitch();
 const KEY = "JingHong";
-/** token 有效期（7天，毫秒） */
 const TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 const formData = ref();
@@ -430,7 +429,7 @@ onMounted(async () => {
 
 const decryptId = (encryptedId) => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedId, KEY); // ← 改为 KEY（全大写）
+    const bytes = CryptoJS.AES.decrypt(encryptedId, KEY); 
     return bytes.toString(CryptoJS.enc.Utf8);
   } catch (error) {
     ElNotification.error("无效的问卷id" + error);

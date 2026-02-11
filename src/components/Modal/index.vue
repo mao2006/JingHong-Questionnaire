@@ -6,7 +6,6 @@
     @click.self="onBackdrop"
   >
     <div class="bg-gray-300 dark:bg-customGray_shallow modal-box" :class="{ 'bg-white': white, 'rounded-none': unRounded, 'pb-0 pt-[1rem]': noPb }">
-      <!-- 只在 noClose 为 false 时渲染关闭按钮 -->
       <form v-if="!noClose" method="dialog">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 outline-none">
           ✕
