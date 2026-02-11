@@ -38,7 +38,7 @@
             </button>
           </div>
 
-          <el-image class="w-2/3" src="https://img.lonesome.cn/jhwl/project/questionnaire/jxh_logo.webp" />
+          <el-image class="w-2/3" src="/jxh_logo.webp" />
         </div>
         <el-skeleton
           :loading="loading"
@@ -229,8 +229,8 @@
       >
         <template #default>
           <div class="flex-col">
-            <div v-if="showData && showData.baseConfig && showData.baseConfig.undergradOnly !== undefined" class="text-sm">
-              该问卷仅限校内{{ showData && showData.baseConfig && showData.baseConfig.undergradOnly ? '本科生' : '学生' }}作答,提交前需要先进行<span class="font-bold">统一身份认证</span>
+            <div v-if="showData?.baseConfig.undergradOnly" class="text-sm">
+              该问卷仅限校内{{ showData?.baseConfig.undergradOnly ? '本科生':'学生' }}作答,提交前需要先进行<span class="font-bold">统一身份认证</span>
             </div>
             <div class="flex-col gap-10 mt-10">
               <span class="flex gap-10 text-sm items-center"><span class="w-110 flex justify-end">职工号/学号</span> <el-input v-model="verifyData.stu_id" :disabled="disabledInput" /></span>
@@ -248,8 +248,17 @@
           </div>
           <div>
             <el-button
+              v-if="showData && !showData.baseConfig.verify || tokenOutDate"
               class="btn bg-red-800 text-red-50 w-full hover:bg-red-600 rounded-none h-40 min-h-0"
-              :disabled="disabledInput || !canVerify"
+              :disabled="disabledInput"
+              @click="submit"
+            >
+              确认
+            </el-button>
+            <el-button
+              v-else
+              class="btn bg-red-800 text-red-50 w-full hover:bg-red-600 rounded-none h-40 min-h-0"
+              :disabled="disabledInput"
               @click="verify"
             >
               确认
@@ -264,7 +273,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
 import { useRequest } from "vue-hooks-plus";
-import { getUserAPI, setUserSubmitAPI } from "@/apis";
+import { getQuestionnaireAPI, setUserSubmitAPI, getStatisticAPI, verifyAPI } from "@/apis";
 import { ElNotification } from "element-plus";
 import { modal, showModal } from "@/components";
 import radio from "@/pages/View/radio.vue";
@@ -280,9 +289,7 @@ import CryptoJS from "crypto-js";
 import { useMainStore } from "@/stores";
 // 暗黑模式hook
 import { useDarkModeSwitch } from "@/utilities/darkModeSwitch";
-import verifyAPI from "@/apis/service/User/verifyApi.ts";
 import Vote from "@/pages/View/vote.vue";
-import getStatistic from "@/apis/service/User/getStatistic.ts";
 import { deepSnakeToCamel } from "@/utilities/deepSnakeToCamel.ts";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 import { QuesType } from "@/utilities/constMap.ts";
@@ -450,9 +457,11 @@ const getQuestionnaireView = async () => {
           answer: ""
         }));
 
+        // console.log(showData.value);
+
         if (showData.value.surveyType === QuesType.VOTE) {
           try {
-            const statRes = await getStatistic({ id: Number(decryptedId.value) });
+            const statRes = await getStatisticAPI({ id: Number(decryptedId.value) });
             resultData.value = statRes.data.statistics[0].options;
           } catch (e) {
             ElNotification.error(e instanceof Error ? e.message : String(e));

@@ -119,7 +119,7 @@ const showQRcodeModal = (qrCodeURL: Ref<string, string>, copyQrCode: () => Promi
 let modalCopyCodeURL: () => void;
 
 watch(surveyType, () => {
-  tempStore.surveyType = surveyType;
+  tempStore.surveyType = surveyType.value;
 });
 onMounted(() => {
   loginStore.setShowHeader(true);
@@ -132,12 +132,13 @@ const getQuestionnaireList = (title?: string) => {
     title: title
   }), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
-      if (res.code === 200) {
-        questionnaireList.value = res.data.survey_list;
-        totalPageNum.value = res.data.total_page_num;
-        loading.value = false;
+    onSuccess(res) {
+      if (res.code !== 200) {
+        throw new Error(res.msg);
       }
+      questionnaireList.value = res.data.survey_list;
+      totalPageNum.value = res.data.total_page_num;
+      loading.value = false;
     },
     onFinally: () => closeLoading()
   });

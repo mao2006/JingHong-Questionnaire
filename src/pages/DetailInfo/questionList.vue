@@ -8,13 +8,13 @@
         </div>
       </div>
       <div class="divider" />
-      <div v-if="schema && schema.quesConfig" class="flex flex-col gap-5 bg-base-100">
+      <div v-if="schema && schema.quesConfig" class="flex flex-col gap-5 bg-base-100 dark:bg-customGray">
         <div
           v-for="q in schema.quesConfig.questionList"
           :key="q.serialNum"
           @click="activeSerial = q.serialNum"
         >
-          <div class="relative flex items-center gap-4 w-full">
+          <div class="relative flex items-center gap-4 w-full dark:bg-[#1A1A1A]">
             <div v-if="q.quesSetting.questionType === QuesItemType.RADIO" class="flex-grow w-full">
               <el-skeleton animated :loading="loading">
                 <radio
@@ -204,7 +204,7 @@ import { ElNotification } from "element-plus";
 import { showModal, modal } from "@/components";
 import router from "@/router";
 import { useRequest } from "vue-hooks-plus";
-import { setNewQuestionnaireDetailAPI } from "@/apis";
+import { createQuestionnaireDetailAPI } from "@/apis";
 import { closeLoading, startLoading } from "@/utilities";
 import { deepCamelToSnake } from "@/utilities/deepCamelToSnake.ts";
 
@@ -243,9 +243,9 @@ const mode = ref("ques");
 
 const submit = (state: number) => {
   schema.value.status = state;
-  useRequest(() => setNewQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
+  useRequest(() => createQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         if (state === 1) {
           ElNotification.success("创建并保存为草稿成功");
@@ -269,9 +269,9 @@ const submit = (state: number) => {
 };
 
 const saveEdit = () => {
-  useRequest(() => setNewQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
+  useRequest(() => createQuestionnaireDetailAPI(deepCamelToSnake(schema.value)), {
     onBefore: () => startLoading(),
-    onSuccess(res: any) {
+    onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         ElNotification.success("保存成功");
         router.push("/admin");
