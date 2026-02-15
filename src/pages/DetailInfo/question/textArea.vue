@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="divider" />
-    <textarea placeholder="Type here" class="qestionTextInput textarea textarea-bordered w-full h-100" />
+    <textarea placeholder="Type here" class="questionTextInput textarea textarea-bordered w-full h-100" />
     <!-- <div class="divider" />
     <div class="mt-20 flex justify-evenly items-center ">
       <button class="btn btn-error dark:opacity-75 shadow-md dark:text-white" @click="$emit('on-click')">
@@ -80,7 +80,7 @@ watch(localUnique, (newUnique) => {
 </script>
 
 <style scoped>
-.qestionTextInput {
+.questionTextInput {
   @apply rounded-none focus:outline-none dark:bg-customGray_more_shallow shadow-md
 }
 </style>

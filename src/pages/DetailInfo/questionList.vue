@@ -15,7 +15,7 @@
           @click="activeSerial = q.serialNum"
         >
           <div class="relative flex items-center gap-4 w-full dark:bg-[#1A1A1A]">
-            <div v-if="q.quesSetting.questionType === QuesItemType.RADIO" class="qestionItems">
+            <div v-if="q.quesSetting.questionType === QuesItemType.RADIO" class="questionItems">
               <el-skeleton animated :loading="loading">
                 <radio
                   v-model:title="q.subject"
@@ -30,7 +30,7 @@
                 />
               </el-skeleton>
             </div>
-            <div v-if="q.quesSetting.questionType === QuesItemType.CHECKBOX" class="qestionItems">
+            <div v-if="q.quesSetting.questionType === QuesItemType.CHECKBOX" class="questionItems">
               <el-skeleton animated :loading="loading">
                 <template #template>
                   <skeleton-card />
@@ -52,7 +52,7 @@
                 </template>
               </el-skeleton>
             </div>
-            <div v-if="q.quesSetting.questionType === QuesItemType.INPUT" class="qestionItems">
+            <div v-if="q.quesSetting.questionType === QuesItemType.INPUT" class="questionItems">
               <el-skeleton animated :loading="loading">
                 <template #template>
                   <skeleton-card />
@@ -71,7 +71,7 @@
                 </template>
               </el-skeleton>
             </div>
-            <div v-if="q.quesSetting.questionType === QuesItemType.TEXTAREA" class="qestionItems">
+            <div v-if="q.quesSetting.questionType === QuesItemType.TEXTAREA" class="questionItems">
               <el-skeleton :loading="loading">
                 <template #template>
                   <skeleton-card />
@@ -89,7 +89,7 @@
                 </template>
               </el-skeleton>
             </div>
-            <div v-if="q.quesSetting.questionType === QuesItemType.PHOTO" class="qestionItems">
+            <div v-if="q.quesSetting.questionType === QuesItemType.PHOTO" class="questionItems">
               <el-skeleton animated :loading="loading">
                 <template #template>
                   <skeleton-card />
@@ -139,7 +139,7 @@
     <div class="flex justify-center items-center gap-10 mt-10">
       <button
         v-show="isNew === 'true'"
-        class="btn btn-sm qestionActionButton"
+        class="btn btn-sm questionActionButton"
         style="border-radius: 0"
         @click="showModal('SaveQuestionnaireSubmit')"
       >
@@ -147,7 +147,7 @@
       </button>
       <button
         v-show="isNew === 'true'"
-        class="btn btn-sm qestionActionButton"
+        class="btn btn-sm questionActionButton"
         style="border-radius: 0"
         @click="showModal(surveyId === -1?'NewQuestionnaireSubmit':'SaveQuestionnaireSubmit')"
       >
@@ -297,10 +297,10 @@ const saveEdit = () => {
 .questionHeader {
   @apply bg-base-200 flex focus:bg-base-100 hover:border-gray-300 w-[100%] dark:bg-customGray
 }
-.qestionItems {
+.questionItems {
   @apply flex-grow w-full
 }
-.qestionActionButton {
+.questionActionButton {
   @apply dark:opacity-75 dark:text-white flex-1 hover:bg-red-200 bg-red-100 hover:border-red-300
 }
 </style>
