@@ -9,7 +9,7 @@
             v-model="localTitle"
             type="text"
             placeholder="Question"
-            class="qestionTextInput input input-bordered w-350"
+            class="questionTextInput input input-bordered w-350"
           >
           <div v-else class="w-350">
             {{ localTitle }}
