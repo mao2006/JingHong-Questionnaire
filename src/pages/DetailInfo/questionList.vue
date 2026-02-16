@@ -138,18 +138,16 @@
     </div>
     <div class="flex justify-center items-center gap-10 mt-10">
       <button
-        v-show="isNew === 'true'"
         class="btn dark:opacity-75 dark:text-white btn-sm flex-1 bg-red-100 hover:bg-red-200 hover:border-red-300"
         style="border-radius: 0"
-        @click="showModal('SaveQuestionnaireSubmit')"
+        @click="handleSaveBtnClick"
       >
         保存
       </button>
       <button
-        v-show="isNew === 'true'"
         class="btn btn-sm dark:opacity-75 dark:text-white flex-1 hover:bg-red-200 bg-red-100 hover:border-red-300"
         style="border-radius: 0"
-        @click="openPublish"
+        @click="handlePublishBtnClick"
       >
         发布
       </button>
@@ -163,7 +161,7 @@
       该操作会直接发布问卷!请确认问卷无误
     </template>
     <template #action>
-      <button class="btn btn-success w-80" @click="submit(2)">
+      <button class="btn btn-success w-80" @click="publishQues">
         确认
       </button>
     </template>
@@ -176,7 +174,7 @@
       确认要保存更改吗?
     </template>
     <template #action>
-      <button class="btn btn-success dark:opacity-75 w-80" @click="saveEdit">
+      <button class="btn btn-success dark:opacity-75 w-80" @click="saveQues">
         确认
       </button>
     </template>
@@ -184,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import Checkbox from "@/pages/DetailInfo/question/checkbox.vue";
 import Fill from "@/pages/DetailInfo/question/fill.vue";
 import TextArea from "@/pages/DetailInfo/question/textArea.vue";
@@ -216,7 +214,7 @@ const loading = ref(true);
 
 const editStore = useEditStore();
 const { deleteQuestion, moveQuestion, resetSchema } = editStore;
-const { schema, surveyId } = storeToRefs(editStore); // 响应式
+const { schema, surveyId } = storeToRefs(editStore);
 
 watch(schema, (newVal) => {
   if (newVal) {
@@ -226,7 +224,8 @@ watch(schema, (newVal) => {
 
 const { activeSerial } = storeToRefs(useActiveStore());
 
-const isNew = "true";
+/** 是否是新问卷 */
+const isNew = computed(() => surveyId.value === -1);
 const activeMove = (index: number, action: "up" | "down") => {
   moveQuestion(index, action);
   if (action === "up") {
@@ -243,7 +242,7 @@ const activeDelete = (index: number) => {
 
 const mode = ref("ques");
 
-// 创建问卷 Hook
+// 创建问卷
 const { run: runCreate } = useRequest(createQuestionnaireDetailAPI, {
   manual: true,
   onBefore: () => startLoading(),
@@ -267,7 +266,7 @@ const { run: runCreate } = useRequest(createQuestionnaireDetailAPI, {
   }
 });
 
-// 更新内容 Hook (用于保存草稿内容)
+// 更新问卷内容
 const { run: runUpdateContent } = useRequest(setQuestionnaireDetailAPI, {
   manual: true,
   onBefore: () => startLoading(),
@@ -286,7 +285,7 @@ const { run: runUpdateContent } = useRequest(setQuestionnaireDetailAPI, {
   }
 });
 
-// 更新状态 Hook (用于已有问卷发布)
+// 更新问卷状态
 const { run: runUpdateStatus } = useRequest(updateQuestionnaireStatusAPI, {
   manual: true,
   onBefore: () => startLoading(),
@@ -305,18 +304,21 @@ const { run: runUpdateStatus } = useRequest(updateQuestionnaireStatusAPI, {
   }
 });
 
-// 统一控制“发布”按钮弹窗
-const openPublish = () => {
-  // 无论是新建还是已有，点击发布都打开“确认发布”弹窗
+/** 点击保存按钮 */
+const handleSaveBtnClick = () => {
+  showModal("SaveQuestionnaireSubmit");
+};
+
+/** 点击发布按钮 */
+const handlePublishBtnClick = () => {
   showModal("NewQuestionnaireSubmit");
 };
 
-// 确认发布 (Modal 回调)
-const submit = async (state: number) => {
-  // state = 2 (发布)
-  if (surveyId.value === -1) {
+/** 发布问卷 */
+const publishQues = async () => {
+  if (isNew.value) {
     // 新建 -> 创建并发布
-    schema.value.status = state;
+    schema.value.status = 2;
     runCreate(deepCamelToSnake(schema.value));
   } else {
     // 已有 -> 先保存内容，再更新状态
@@ -332,8 +334,7 @@ const submit = async (state: number) => {
       }
 
       // 2. 更新状态
-      runUpdateStatus({ id: surveyId.value, status: state as 1 | 2 });
-
+      runUpdateStatus({ id: surveyId.value, status: 2 });
     } catch (e: any) {
       ElNotification.error(e.message || e);
       closeLoading();
@@ -341,10 +342,10 @@ const submit = async (state: number) => {
   }
 };
 
-// 确认保存 (Modal 回调)
-const saveEdit = () => {
+/** 保存问卷 */
+const saveQues = () => {
   // 新建场景的“保存”为创建草稿
-  if (surveyId.value === -1) {
+  if (isNew.value) {
     schema.value.status = 1;
     runCreate(deepCamelToSnake(schema.value));
     return;
