@@ -12,7 +12,7 @@
 
     <div class="pl-16">
       <!-- 所有题型通用 -->
-      <div class="text-sm font-medium">
+      <div class="questionText">
         基础配置
       </div>
       <div class="pt-8">
@@ -40,7 +40,7 @@
         />
       </div>
 
-      <div class="pt-16 text-sm font-medium">
+      <div class="pt-16 questionText">
         引导介绍文案
       </div>
 
@@ -55,7 +55,7 @@
 
       <!-- 填空特殊逻辑 -->
       <div v-if="currentType === QuesItemType.INPUT || currentType === QuesItemType.TEXTAREA" class="pt-24">
-        <div class="text-sm font-medium">
+        <div class="questionText">
           内容格式限制
         </div>
         <div class="pt-16">
@@ -72,12 +72,12 @@
 
       <!-- 多选特殊逻辑 -->
       <div v-if="currentType === QuesItemType.CHECKBOX" class="pt-24">
-        <div class="text-sm font-medium">
+        <div class="questionText">
           选项配置
         </div>
         <div class="pt-16">
           <div>
-            <span class="text-sm font-medium pr-8">最少选择数</span>
+            <span class="questionText pr-8">最少选择数</span>
             <el-input-number
               v-model="questionList[activeSerial - 1].quesSetting.minimumOption"
               min="0"
@@ -85,7 +85,7 @@
             />
           </div>
           <div class="pt-10">
-            <span class="text-sm font-medium pr-8">最多选择数</span>
+            <span class="questionText pr-8">最多选择数</span>
             <el-input-number
               v-model="questionList[activeSerial - 1].quesSetting.maximumOption"
               :min="questionList[activeSerial - 1].quesSetting.minimumOption"
@@ -163,4 +163,8 @@ const addOption = (serialNum: number) => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.questionText {
+  @apply text-sm font-medium
+}
+</style>
