@@ -292,7 +292,7 @@ const saveEdit = () => {
 
 <style scoped>
 .questionButton {
-  @apply rounded-full w-24 h-24 flex justify-center items-center bg-gray-300 hover:bg-gray-400 text-white transition-colors duration-200;
+  @apply rounded-full w-24 h-24 flex justify-center items-center bg-gray-300 hover:bg-gray-400 text-white transition-colors duration-200
 }
 .questionHeader {
   @apply bg-base-200 flex focus:bg-base-100 hover:border-gray-300 w-[100%] dark:bg-customGray

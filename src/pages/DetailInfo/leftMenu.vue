@@ -26,7 +26,7 @@
           <img src="@/assets/checkbox.svg" class="questionType">
         </add-ques-button>
         <!--        <add-ques-button text="投票" type="6">-->
-        <!--          <img src="@/assets/vote.svg" class="qestionType">-->
+        <!--          <img src="@/assets/vote.svg" class="questionType">-->
         <!--        </add-ques-button>-->
       </add-ques-button-panel>
       <el-divider />
