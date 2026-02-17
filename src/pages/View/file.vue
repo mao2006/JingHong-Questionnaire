@@ -68,7 +68,7 @@ import type { UploadFile, UploadFiles } from "element-plus";
 import { ElMessage } from "element-plus";
 import { Delete, Plus, ZoomIn } from "@element-plus/icons-vue";
 import { useMainStore } from "@/stores";
-import { cloneDeep, isEmpty } from "lodash-es";
+import { isEmpty } from "lodash-es";
 
 const props = defineProps<{
   questionnaireID: string;
