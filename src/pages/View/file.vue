@@ -34,7 +34,7 @@
         <el-icon><plus /></el-icon>
 
         <template #file="{ file, index }: {file: UploadFile; index: number}">
-          <div v-loading="!file.response">
+          <div v-loading="file.status === 'uploading'">
             <img class="el-upload-list__item-thumbnail" :src="file.url">
             <span class="el-upload-list__item-actions">
               <span
@@ -68,7 +68,7 @@ import type { UploadFile, UploadFiles } from "element-plus";
 import { ElMessage } from "element-plus";
 import { Delete, Plus, ZoomIn } from "@element-plus/icons-vue";
 import { useMainStore } from "@/stores";
-import { isEmpty } from "lodash-es";
+import { cloneDeep, isEmpty } from "lodash-es";
 
 const props = defineProps<{
   questionnaireID: string;
@@ -105,7 +105,8 @@ const handlePictureCardPreview = (file: UploadFile) => {
 };
 
 const handleRemove = (index: number) => {
-  fileList.value.splice(index, 1);
+  fileList.value = fileList.value.filter((_, i) => i !== index);
+  localAnswer.value = "";
 };
 
 // 上传成功回调

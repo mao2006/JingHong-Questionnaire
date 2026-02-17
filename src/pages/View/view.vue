@@ -385,7 +385,7 @@ const submit = () => {
     async onSuccess(res) {
       if (res.code === 200 && res.msg === "OK") {
         if (!decryptedId.value) {
-          throw "无效的问卷id";
+          throw Error("无效的问卷id");
         }
         const { useImageStore, useOptionStore, useQuetionnaireStore } = useMainStore();
         const questionnaireStore = useQuetionnaireStore();
