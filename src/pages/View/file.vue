@@ -63,11 +63,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import type { UploadFile, UploadFiles } from "element-plus";
 import { ElMessage } from "element-plus";
 import { Delete, Plus, ZoomIn } from "@element-plus/icons-vue";
 import { useMainStore } from "@/stores";
+import { isEmpty } from "lodash-es";
 
 const props = defineProps<{
   questionnaireID: string;
@@ -87,6 +88,15 @@ const disabled = ref(false);
 const fileList = computed({
   get: () => imageStore.getFileList(props.questionnaireID, props.serial_num),
   set: (newValue: UploadFile[]) => imageStore.setFileList(props.questionnaireID, props.serial_num, newValue)
+});
+
+const localAnswer = ref(props.answer);
+
+// TODO: 状态持久化写得稀碎，被迫使用以下临时方案。重构时请删除，在父组件统一管理状态持久化
+onMounted(() => {
+  if (!isEmpty(fileList.value)) {
+    localAnswer.value = fileList.value[0].url ?? "";
+  }
 });
 
 const handlePictureCardPreview = (file: UploadFile) => {
@@ -123,8 +133,6 @@ const beforeUpload = (file: UploadFile) => {
 };
 
 const emits = defineEmits(["update:answer"]);
-
-const localAnswer = ref(props.answer);
 
 watch(localAnswer, (newAnswer) => {
   emits("update:answer", newAnswer);
