@@ -25,7 +25,6 @@
         list-type="picture-card"
         :auto-upload="true"
         :on-success="handleUploadSuccess"
-        :on-remove="handleRemove"
         :file-list="fileList"
         :limit="1"
         :on-exceed="handleExceed"
@@ -34,20 +33,20 @@
       >
         <el-icon><plus /></el-icon>
 
-        <template #file="{ file }">
-          <div>
-            <img class="el-upload-list__item-thumbnail" :src="props.answer">
+        <template #file="{ file, index }: {file: UploadFile; index: number}">
+          <div v-loading="!file.response">
+            <img class="el-upload-list__item-thumbnail" :src="file.url">
             <span class="el-upload-list__item-actions">
               <span
                 class="el-upload-list__item-preview"
-                @click="handlePictureCardPreview(file as UploadFile)"
+                @click="handlePictureCardPreview(file)"
               >
                 <el-icon><zoom-in /></el-icon>
               </span>
               <span
                 v-if="!disabled"
                 class="el-upload-list__item-delete"
-                @click="handleRemove(file as UploadFile)"
+                @click="handleRemove(index)"
               >
                 <el-icon><delete /></el-icon>
               </span>
@@ -57,59 +56,59 @@
       </el-upload>
 
       <el-dialog v-model="dialogVisible">
-        <img w-full :src="props.answer" alt="Preview Image">
+        <img w-full :src="dialogImageUrl" alt="Preview Image">
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from "vue";
-import type { UploadFile } from "element-plus";
+import { ref, watch, computed } from "vue";
+import type { UploadFile, UploadFiles } from "element-plus";
 import { ElMessage } from "element-plus";
 import { Delete, Plus, ZoomIn } from "@element-plus/icons-vue";
 import { useMainStore } from "@/stores";
+
+const props = defineProps<{
+  questionnaireID: string;
+  serial_num: number;
+  title: string;
+  required: boolean;
+  unique: boolean;
+  describe: string;
+  answer: string;
+}>();
 
 const imageStore = useMainStore().useImageStore();
 
 const dialogImageUrl = ref("");
 const dialogVisible = ref(false);
 const disabled = ref(false);
-const fileList = ref<UploadFile[]>([]);
-fileList.value = imageStore.fileList;
+const fileList = computed({
+  get: () => imageStore.getFileList(props.questionnaireID, props.serial_num),
+  set: (newValue: UploadFile[]) => imageStore.setFileList(props.questionnaireID, props.serial_num, newValue)
+});
 
 const handlePictureCardPreview = (file: UploadFile) => {
   dialogImageUrl.value = file.url!;
   dialogVisible.value = true;
 };
 
-const handleRemove = () => {
-  imageStore.clearFiles(); // 清空 Pinia 文件列表
-  fileList.value = []; // 清空本地列表
+const handleRemove = (index: number) => {
+  fileList.value.splice(index, 1);
 };
 
 // 上传成功回调
-const handleUploadSuccess = (response: any, file: UploadFile) => {
+const handleUploadSuccess = (response: any, file: UploadFile, files: UploadFiles) => {
   if (response.code == 200) {
     ElMessage.success("上传成功！");
-    fileList.value = [{ ...file, url: response.data }];
-    const uploadedFile: UploadFile = { ...file, url: response.data };
-    imageStore.addFile(uploadedFile); // 将文件推入 Pinia 存储
-    localAnswer.value = response.data;
+    file.url = response.data;
+    fileList.value = files;
+    localAnswer.value = file.url ?? ""; // TODO: 后续支持单题多文件后，应当改为支持数组的写法
   } else {
     ElMessage.error(response.msg);
   }
-
 };
-
-const props = defineProps({
-  serial_num: Number,
-  title: String,
-  required: Boolean,
-  unique: Boolean,
-  describe: String,
-  answer: String
-});
 
 const handleExceed = () => {
   ElMessage.warning("最多只能上传一张图片！");
@@ -128,15 +127,10 @@ const emits = defineEmits(["update:answer"]);
 const localAnswer = ref(props.answer);
 
 watch(localAnswer, (newAnswer) => {
-  // console.log(newAnswer)
   emits("update:answer", newAnswer);
 });
 
 </script>
 
 <style scoped>
-</style>
-
-<style scoped>
-
 </style>
