@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from "vue";
-import type { UploadFile, UploadFiles } from "element-plus";
+import type { UploadFile, UploadFiles, UploadRawFile } from "element-plus";
 import { ElMessage } from "element-plus";
 import { Delete, Plus, ZoomIn } from "@element-plus/icons-vue";
 import { useMainStore } from "@/stores";
@@ -125,7 +125,7 @@ const handleExceed = () => {
   ElMessage.warning("最多只能上传一张图片！");
 };
 
-const beforeUpload = (file: UploadFile) => {
+const beforeUpload = (file: UploadRawFile) => {
   const isImage = file.type.startsWith("image/");
   if (!isImage) {
     ElMessage.error("上传的文件必须是图片!");
