@@ -21,10 +21,12 @@
     <div class="flex-col p-5 h-auto">
       <!-- 开发环境下 action 前面加/api-->
       <el-upload
+        :class="{ 'hide-upload-trigger': fileList.length >= 1 }"
         action="/api/user/upload/img"
         list-type="picture-card"
         :auto-upload="true"
         :on-success="handleUploadSuccess"
+        :on-error="handleUploadError"
         :file-list="fileList"
         :limit="1"
         :on-exceed="handleExceed"
@@ -58,6 +60,9 @@
       <el-dialog v-model="dialogVisible">
         <img w-full :src="dialogImageUrl" alt="Preview Image">
       </el-dialog>
+      <p v-if="uploadErrorText" class="mt-8 text-sm text-red-500">
+        {{ uploadErrorText }}
+      </p>
     </div>
   </div>
 </template>
@@ -85,6 +90,7 @@ const imageStore = useMainStore().useImageStore();
 const dialogImageUrl = ref("");
 const dialogVisible = ref(false);
 const disabled = ref(false);
+const uploadErrorText = ref("");
 const fileList = computed({
   get: () => imageStore.getFileList(props.questionnaireID, props.serial_num),
   set: (newValue: UploadFile[]) => imageStore.setFileList(props.questionnaireID, props.serial_num, newValue)
@@ -107,30 +113,67 @@ const handlePictureCardPreview = (file: UploadFile) => {
 const handleRemove = (index: number) => {
   fileList.value = fileList.value.filter((_, i) => i !== index);
   localAnswer.value = "";
+  uploadErrorText.value = "";
+};
+
+type UploadResponse = {
+  code: number;
+  msg?: string;
+  data?: string;
 };
 
 // 上传成功回调
-const handleUploadSuccess = (response: any, file: UploadFile, files: UploadFiles) => {
-  if (response.code == 200) {
+const handleUploadSuccess = (response: UploadResponse, file: UploadFile, files: UploadFiles) => {
+  if (response.code == 200 && typeof response.data === "string" && response.data.length > 0) {
     ElMessage.success("上传成功！");
+    uploadErrorText.value = "";
     file.url = response.data;
     fileList.value = files;
     localAnswer.value = file.url ?? ""; // TODO: 后续支持单题多文件后，应当改为支持数组的写法
   } else {
-    ElMessage.error(response.msg);
+    const errorMsg = response.msg || "上传失败，请重新上传";
+    uploadErrorText.value = errorMsg;
+    localAnswer.value = "";
+    fileList.value = files.filter((uploadFile) => uploadFile.uid !== file.uid);
+    ElMessage.error(errorMsg);
   }
+};
+
+const handleUploadError = (error: Error, file: UploadFile, files: UploadFiles) => {
+  const errorMsg = error.message || "图片上传失败，请检查网络后重试";
+  uploadErrorText.value = errorMsg;
+  localAnswer.value = "";
+  fileList.value = files.filter((uploadFile) => uploadFile.uid !== file.uid);
+  ElMessage.error(errorMsg);
 };
 
 const handleExceed = () => {
+  uploadErrorText.value = "";
   ElMessage.warning("最多只能上传一张图片！");
 };
 
+const allowedImageMimeTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+const allowedImageExtensions = new Set(["png", "jpg", "jpeg", "webp"]);
+
 const beforeUpload = (file: UploadRawFile) => {
-  const isImage = file.type.startsWith("image/");
-  if (!isImage) {
-    ElMessage.error("上传的文件必须是图片!");
+  const extension = file.name.split(".").pop()?.toLowerCase() || "";
+  const isSvg = file.type === "image/svg+xml" || extension === "svg";
+  const isAllowedType = allowedImageMimeTypes.has(file.type) || allowedImageExtensions.has(extension);
+
+  if (isSvg) {
+    uploadErrorText.value = "暂不支持 SVG 格式，请上传 PNG/JPG/JPEG/WEBP 图片";
+    ElMessage.error(uploadErrorText.value);
+    return false;
   }
-  return isImage; // 如果返回 false，则会取消上传
+
+  if (!isAllowedType) {
+    uploadErrorText.value = "仅支持 PNG/JPG/JPEG/WEBP 格式图片";
+    ElMessage.error(uploadErrorText.value);
+    return false;
+  }
+
+  uploadErrorText.value = "";
+  return true; // 如果返回 false，则会取消上传
 };
 
 const emits = defineEmits(["update:answer"]);
@@ -142,4 +185,7 @@ watch(localAnswer, (newAnswer) => {
 </script>
 
 <style scoped>
+:deep(.hide-upload-trigger.el-upload--picture-card) {
+  display: none;
+}
 </style>
