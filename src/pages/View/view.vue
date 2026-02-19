@@ -488,6 +488,10 @@ const getQuestionnaireView = async () => {
 
 const checkAnswer = () => {
   const hasUnansweredRequiredQuestion = showData.value.quesConfig.questionList.some((q) => {
+    if (q.quesSetting.questionType === 5 && q.quesSetting.required && q.answer === "") {
+      ElNotification.error(`第${q.serialNum}题图片上传失败或未完成，请重新上传.`);
+      return true;
+    }
     if (q.quesSetting.required && q.answer === "") {
       ElNotification.error("您有题目未完成作答.");
       return true;
@@ -500,13 +504,16 @@ const checkAnswer = () => {
       ElNotification.error("您有多选题未完成作答.");
       return true;
     }
-    if (q.quesSetting.questionType === 2 && q.answer.split("┋").length > q.quesSetting.maximumOption || q.answer.split("┋").length < q.quesSetting.minimumOption) {
-      if (q.answer.split("┋").length > q.quesSetting.maximumOption) {
-        ElNotification.error(`该投票最多只能选择${q.quesSetting.maximumOption}个选项`);
-      } else if (q.answer.split("┋").length < q.quesSetting.minimumOption) {
-        ElNotification.error(`该投票最少需要选择${q.quesSetting.minimumOption}个选项`);
+    if (q.quesSetting.questionType === 2) {
+      const selectedCount = q.answer.split("┋").length;
+      if (selectedCount > q.quesSetting.maximumOption || selectedCount < q.quesSetting.minimumOption) {
+        if (selectedCount > q.quesSetting.maximumOption) {
+          ElNotification.error(`该投票最多只能选择${q.quesSetting.maximumOption}个选项`);
+        } else if (selectedCount < q.quesSetting.minimumOption) {
+          ElNotification.error(`该投票最少需要选择${q.quesSetting.minimumOption}个选项`);
+        }
+        return true;
       }
-      return true;
     }
 
     if (q.quesSetting.questionType === 3 && q.answer !== "" && q.quesSetting.reg && !new RegExp(q.quesSetting.reg).test(q.answer)) {
