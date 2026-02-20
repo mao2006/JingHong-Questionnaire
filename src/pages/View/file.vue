@@ -185,7 +185,7 @@ watch(localAnswer, (newAnswer) => {
 </script>
 
 <style scoped>
-:deep(.hide-upload-trigger.el-upload--picture-card) {
+:deep(.hide-upload-trigger .el-upload--picture-card) {
   display: none;
 }
 </style>
