@@ -141,7 +141,7 @@ const getAnswers = () => {
         answers.value = res.data.answers_data.question_answers;
         time.value = res.data.answers_data.time;
         type.value = res.data.survey_type;
-        answerIds.value = res.data.answers_data.answerIds;
+        answerIds.value = res.data.answers_data.answer_ids;
       }
     },
     onError(e) {

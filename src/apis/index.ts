@@ -1,6 +1,6 @@
 export * from "@/apis/service/DataDisplay/delAnswerAPI";
 export * from "@/apis/service/DataDisplay/getAnswersAPI";
-export * from "@/apis/service/DataDisplay/getDataTableAPI";
+export * from "@/apis/service/DataDisplay/getDatatableAPI";
 export * from "@/apis/service/DataDisplay/getStaticsDataAPI";
 export * from "@/apis/service/DetailInfo/createQuestionnaireDetailAPI.ts";
 export * from "@/apis/service/DetailInfo/getQuestionnaireDetailAPI.ts";

@@ -12,7 +12,7 @@ export interface Data {
 
 export interface AnswersData {
   question_answers: QuestionAnswer[];
-  answerIds: string[];
+  answer_ids: string[];
   time: string[];
 }
 
