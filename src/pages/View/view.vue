@@ -534,7 +534,7 @@ const checkAnswer = () => {
   <style scoped>
   :deep(pre) {
     white-space: pre-wrap; /* css-3 */
-    overflow-wrap: break-word; /* InternetExplorer5.5+ */
+    overflow-wrap: break-word;
     white-space: -moz-pre-wrap; /* Mozilla,since1999 */
     white-space: -o-pre-wrap; /* Opera7 */
   }
